@@ -1,0 +1,10 @@
+.food-plan-group__info {
+
+    margin-bottom: 20px;
+}
+
+.food-plan-group__container {
+    display: grid;
+    gap: 1.5em;
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+}

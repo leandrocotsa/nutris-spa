@@ -1,0 +1,29 @@
+.ongoing-appointment-form__container {
+    margin-top: 20px;
+    display: grid;
+    gap: 1.5em;
+    grid-template-columns: 1.8fr 1fr;
+
+}
+
+.ongoing-appointment-card {
+    margin-bottom: 1em;
+}
+
+
+.ongoing-appointment-form__right-column {
+    max-width: 400px;
+    min-width: 400px;
+    margin-right: auto;
+    margin-left: auto;
+    
+}
+
+
+
+
+@media (max-width: 1000px) {
+    .ongoing-appointment-form__container {
+        grid-template-columns: 1fr;
+    }
+}

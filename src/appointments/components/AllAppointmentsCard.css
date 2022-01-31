@@ -1,0 +1,30 @@
+.all-appointments-card h2 {
+    padding: 10px;
+    margin-bottom: 10px;
+
+}
+
+.all-appointments-card__container {
+    padding-left: 20px;
+    padding-right: 20px;
+    overflow:auto;
+}
+
+
+.all-appointments-card__action-icons {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.all-appointments-card-header {
+    display: flex;
+    justify-content: flex-end;
+
+}
+
+.all-appointments-card-header button {
+    
+    margin-top: 10px;
+    margin-right: 10px;
+}
+

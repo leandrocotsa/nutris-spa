@@ -1,0 +1,49 @@
+
+  .patient-card__anamnesis-modal-view {
+    padding: 8px;
+
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    height: 40em;
+    column-gap: 60px;
+    row-gap: 0px;
+    
+
+  }
+
+
+  .patient-card__anamnesis-modal-view h4 {
+    margin-top: 10px;
+    margin-bottom: 8px;
+}
+
+.anamnesis__info {
+    max-width:40%;
+}
+
+.anamnesis__info h4 {
+    margin-top: 2px;
+}
+
+.patient-card__anamnesis-modal-header {
+    text-align: center;
+}
+.patient-card__anamnesis-modal-header h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+
+.patient-card__anamnesis-modal-edit {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    height: 70em;
+    column-gap: 25px;
+    row-gap: 0px;
+}

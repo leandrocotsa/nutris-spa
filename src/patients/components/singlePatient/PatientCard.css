@@ -1,0 +1,53 @@
+.patient-card {
+    height: 22rem;
+    background: -webkit-linear-gradient(to bottom, #5DC692, #00867C);
+    background: linear-gradient(to bottom, #5DC692, #00867C);
+
+}
+
+.patient-card h2 {
+    margin-top: 20px;
+    color: white;
+
+}
+
+.patient-card h4 {
+    color: white;
+
+}
+
+.patient-card__container {
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    height: 8em;
+    column-gap: 40px;
+}
+
+
+
+  .patient-card__container-image {
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+  }
+
+
+
+
+
+
+  .patient-card__container-image-square {
+      height: 90px;
+      width: 90px;
+      margin-right: auto;
+      margin-left: auto;
+  }
+
+
+  .patient-card__buttons {
+      text-align: center;
+      margin-bottom: 10px;
+  }

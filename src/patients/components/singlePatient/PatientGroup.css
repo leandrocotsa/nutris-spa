@@ -1,0 +1,13 @@
+.patient-group__container {
+    margin-top: 25px;
+    display: grid;
+    gap: 1.5em;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    
+}
+
+
+.patient-group__info {
+
+    margin-bottom: 20px;
+}

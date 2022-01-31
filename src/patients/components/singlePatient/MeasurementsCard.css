@@ -1,0 +1,46 @@
+.measurements-card-header h2 {
+    padding: 10px;
+}
+
+.measurements-card-header h4 {
+    padding-top: 8px;
+    padding-right: 20px;
+}
+
+.measurements-card h4 {
+    margin-top: 10px;
+    margin-bottom: 8px;
+}
+
+
+
+.measurements-card__container {
+    padding: 8px;
+
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    height: 15em;
+    column-gap: 60px;
+}
+
+.measurement-value {
+    color: var(--highlighted-text-color);
+}
+
+.measurements-card__swapper {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.8em;
+    color: var(--highlighted-text-color);
+}
+
+.measurements-card-header {
+    display: flex;
+    justify-content: space-between; /* horizontal spacing */
+  align-content: space-between; 
+}
+
+

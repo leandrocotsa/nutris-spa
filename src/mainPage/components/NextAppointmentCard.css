@@ -1,0 +1,29 @@
+.next-appointment-card h2 {
+    padding: 10px;
+    margin-bottom: 10px;
+    
+
+}
+
+.next-appointment-card h4 {
+    font-size: 0.8rem;
+    margin: 0;
+    font-weight: 500;
+    
+
+}
+
+
+.next-appointment-card__container {
+    height: 60%;
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr;
+    gap: 15px;
+    justify-items: center;
+    align-items:center
+
+}
+
+.next-appointment-card__container-buttons button {
+    display: block;
+}

@@ -1,0 +1,26 @@
+.graphs-card {
+
+    margin-top: 1.5em;
+    margin-bottom: 15px;
+
+
+}
+
+.graphs-card h2 {
+
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.graphs-card__container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    -ms-grid-row-align: center;
+}
+
+.graphs-card__graph {
+  margin-bottom: 20px;
+  margin-right: auto;
+  margin-left: auto;
+}
+

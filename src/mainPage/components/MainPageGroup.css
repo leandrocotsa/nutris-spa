@@ -1,0 +1,56 @@
+.main-page-group__container {
+    margin-top: 25px;
+    display: grid;
+    gap: 1.5em;
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+    margin-bottom: 30px;
+}
+
+
+.main-page-group__info h1 {
+    font-size: 1.9em;
+    margin-bottom: 0;
+}
+
+
+.main-page-group__container-left {
+    display: grid;
+    gap: 1.5em;
+}
+
+.main-page-group__info-emoji {
+
+        animation-name: wave-animation;
+        animation-duration: 2.5s;
+        transform-origin: 70% 70%;
+        display: inline-block;
+      
+}
+
+@keyframes wave-animation {
+    0% {
+      transform: rotate(0deg);
+    }
+    15% {
+      transform: rotate(14deg);
+    }
+    30% {
+      transform: rotate(-8deg);
+    }
+    40% {
+      transform: rotate(14deg);
+    }
+    50% {
+      transform: rotate(-4deg);
+    }
+    60% {
+      transform: rotate(10deg);
+    }
+    70% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+  

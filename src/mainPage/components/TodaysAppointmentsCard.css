@@ -1,0 +1,25 @@
+.todays-appointments-card h2 {
+    padding: 10px;
+    margin-bottom: 10px;
+
+}
+
+.todays-appointments-card__container {
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 360px;
+    overflow:auto;
+}
+
+
+
+
+
+
+.todays-appointments-card-header {
+    display: flex;
+    justify-content: space-between; /* horizontal spacing */
+    align-content: space-between;
+}
+
+

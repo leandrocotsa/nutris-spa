@@ -1,0 +1,27 @@
+.nav-links {
+    list-style: none;
+    padding-left: 60px;
+
+}
+
+
+
+.nav-links li {
+    margin-top: 20px;
+    height: 50px;
+    text-align: left;
+
+}
+
+.nav-links a {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #fff;
+    text-decoration: none; 
+}
+
+.nav-links a:hover,
+.nav-links a:active,
+.nav-links a.active {
+    font-weight: 700;
+}
