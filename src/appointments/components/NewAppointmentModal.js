@@ -47,12 +47,10 @@ const NewAppointmentModal = props => {
             opened={props.opened}
             radius="lg"
             onClose={props.onClose}
+            title={<h3 className='green-text'>New appointment</h3>}
 
         >
             <div className='new-appointment-modal-wrapper'>
-                <div className='new-appointment-modal-header'>
-                    <h3 className='green-text'>New appointment</h3>
-                </div>
                 <form className='new-appointment-form'>
                     <div className="new-appointment-form-item">
                         <DatePicker

@@ -36,38 +36,162 @@ const OngoingAppointmentForm = props => {
 
                     <Card className='ongoing-appointment-card'>
                         <form>
-                        <div className="new-patient-form__item">
-                                        <TextInput
-                                            placeholder="Patient's health problems"
-                                            label="Health problems"
-                                            variant="filled"
-                                            radius="md"
-                                            size="xs"
+                            <div className="ongoing-appointment-form__item">
+                                <NumberInput
+                                    placeholder="Patient's weight"
+                                    label="Weight (in kg)"
+                                    variant="filled"
+                                    radius="md"
+                                    size="xs"
+                                    precision={2}
+                                    step={0.05}
+                                />
+                            </div>
 
-                                        />
-                                    </div>
-                                    <div className="new-patient-form__item">
-                                        <TextInput
-                                            placeholder="Medication taken by the patient"
-                                            label="Medication"
-                                            variant="filled"
-                                            radius="md"
-                                            size="xs"
-                                            style={{ marginTop: 20 }}
-                                        />
-                                    </div>
+                            <div className="ongoing-appointment-form__item">
+                                <NumberInput
+                                    placeholder="Patient's IMC"
+                                    label="IMC"
+                                    variant="filled"
+                                    radius="md"
+                                    size="xs"
+                                    precision={2}
+                                    step={0.05}
+                                    style={{ marginTop: 20 }}
+                                />
+                            </div>
 
-                                    <div className="new-patient-form__item">
-                                        <TextInput
-                                            placeholder="Patient's reason for the appointment"
-                                            label="Reason for appointment"
-                                            variant="filled"
-                                            radius="md"
-                                            size="xs"
-                                            style={{ marginTop: 20 }}
-                                        />
-                                    </div>
-                            <div className='new-patient-form__submit-button'>
+                            <div className="ongoing-appointment-form__item">
+                                <NumberInput
+                                    placeholder="Patient's fat mass in %"
+                                    label="Fat mass percentage"
+                                    variant="filled"
+                                    radius="md"
+                                    size="xs"
+                                    precision={2}
+                                    step={0.05}
+                                    style={{ marginTop: 20 }}
+                                />
+                            </div>
+
+                            <div className="ongoing-appointment-form__item">
+                                <NumberInput
+                                    placeholder="Patient's lean mass in kg"
+                                    label="Lean mass"
+                                    variant="filled"
+                                    radius="md"
+                                    size="xs"
+                                    precision={2}
+                                    step={0.05}
+                                    style={{ marginTop: 20 }}
+                                />
+                            </div>
+
+                            <div className="ongoing-appointment-form__item">
+                                <NumberInput
+                                    placeholder="Patient's water percentage"
+                                    label="Water percentage"
+                                    variant="filled"
+                                    radius="md"
+                                    size="xs"
+                                    precision={2}
+                                    step={0.05}
+                                    style={{ marginTop: 20 }}
+                                />
+                            </div>
+
+                            <div className="ongoing-appointment-form__item">
+                                <NumberInput
+                                    placeholder="Patient's Basal metabolism"
+                                    label="Basal metabolism"
+                                    variant="filled"
+                                    radius="md"
+                                    size="xs"
+                                    precision={2}
+                                    step={0.05}
+                                    style={{ marginTop: 20 }}
+                                />
+                            </div>
+
+                            <div className="ongoing-appointment-form__item">
+                                <NumberInput
+                                    placeholder="Patient's visceral fat"
+                                    label="Visceral fat"
+                                    variant="filled"
+                                    radius="md"
+                                    size="xs"
+                                    precision={2}
+                                    step={0.05}
+                                    style={{ marginTop: 20 }}
+                                />
+                            </div>
+
+                            <div className="ongoing-appointment-form__item">
+                                <NumberInput
+                                    placeholder="Patient's bone mass"
+                                    label="Bone mass"
+                                    variant="filled"
+                                    radius="md"
+                                    size="xs"
+                                    precision={2}
+                                    step={0.05}
+                                    style={{ marginTop: 20 }}
+                                />
+                            </div>
+
+                            <div className="ongoing-appointment-form__item">
+                                <NumberInput
+                                    placeholder="Patient's body age"
+                                    label="Visceral fat"
+                                    variant="filled"
+                                    radius="md"
+                                    size="xs"
+                                    style={{ marginTop: 20 }}
+                                />
+                            </div>
+
+                            <div className="ongoing-appointment-form__item">
+                                <NumberInput
+                                    placeholder="Patient's waist perimeter in cm"
+                                    label="Waist perimeter"
+                                    variant="filled"
+                                    radius="md"
+                                    size="xs"
+                                    precision={2}
+                                    step={0.05}
+                                    style={{ marginTop: 20 }}
+                                />
+                            </div>
+
+                            <div className="ongoing-appointment-form__item">
+                                <NumberInput
+                                    placeholder="Patient's hip perimeter in cm"
+                                    label="Hip perimeter"
+                                    variant="filled"
+                                    radius="md"
+                                    size="xs"
+                                    precision={2}
+                                    step={0.05}
+                                    style={{ marginTop: 20 }}
+                                />
+                            </div>
+                        
+                            <div className="ongoing-appointment-form__item">
+                                <NumberInput
+                                    placeholder="Patient's chest perimeter in cm"
+                                    label="Chest perimeter"
+                                    variant="filled"
+                                    radius="md"
+                                    size="xs"
+                                    precision={2}
+                                    step={0.05}
+                                    style={{ marginTop: 20, marginBottom: 20}}
+                                />
+                            </div>
+
+     
+
+                            <div className='new-measurement-form__submit-button'>
                                 <Button color='teal' variant="outline" compact>Submit</Button>
                             </div>
 
@@ -79,7 +203,7 @@ const OngoingAppointmentForm = props => {
                 <div className="ongoing-appointment-form__right-column">
 
                     <div className='ongoing-appointment-card'>
-                        <PatientCard patient={props.patient} editable={false} />
+                        <PatientCard className="ongoing-appointment-card-patient" patient={props.patient} editable={false} />
                     </div>
                     <div className='ongoing-appointment-card'>
                         <MeasurementsCard measurements={props.patient.measurementsList} />

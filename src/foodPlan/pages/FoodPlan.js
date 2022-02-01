@@ -61,9 +61,14 @@ const FoodPlan = () => {
       }
     ]
   };
+
+  const foodPlan = [
+      {"id": 1},
+      {"id": 2}
+  ]
   
 
-  return <FoodPlanGroup patient={patientData} />;
+  return <FoodPlanGroup patient={patientData} foodPlan={foodPlan} />;
 };
 
 export default FoodPlan;

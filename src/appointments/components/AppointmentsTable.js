@@ -1,6 +1,6 @@
 import React from 'react';
 
-
+import { Link } from 'react-router-dom';
 
 import { Table, Badge, Menu, Divider } from '@mantine/core';
 
@@ -32,36 +32,58 @@ const AppointmentsTable = props => {
                 : <td>{reformatDate(appointment.startDate)}</td>
             }
 
-            {props.patientName && <td>{appointment.patientName}</td>}
+            {props.patientName &&
+
+                <td>
+                    <div>
+                        {appointment.patientId
+                            ?
+                            <Link to={`/patients/${appointment.patientId}`}>
+                                {appointment.patientName}
+                            </Link>
+                            : 
+                            <>
+                                {appointment.patientName}
+                            </>
+                        }
+                        
+                    </div>
+                </td>}
 
 
 
 
             {appointment.type === "FIRST"
-                ? <td><Badge variant="outline" color="red">{appointment.type}</Badge></td>
-                : <td><Badge variant="outline" color="cyan">{appointment.type}</Badge></td>}
+                ? <td><Badge size="xs" variant="outline" color="red">{appointment.type}</Badge></td>
+                : <td><Badge size="xs" variant="outline" color="cyan">{appointment.type}</Badge></td>}
             {appointment.state === "COMPLETED"
                 ? <td><Badge color="teal">{appointment.state}</Badge></td>
                 : <td><Badge color="orange">{appointment.state}</Badge></td>}
             <td>
-                <span className='all-appointments-card__action-icons'>
-                    <Menu className='header__avatar'
+                <div className='all-appointments-card__action-icons'>
+                    <Menu
                         position="bottom"
                         placement="start"
                         gutter={8}
                         withArrow
                         control={
                             <div>
-                            <BsCaretDownFill />
+                                <BsCaretDownFill />
                             </div>
+
                         }>
-                        <Menu.Item icon={<BiCalendarStar />}>Start</Menu.Item>
+
+                        {appointment.state !== "COMPLETED"
+                            ? <Menu.Item component={Link} to={appointment.type === "FIRST" ? `/patients/new` : `/appointments/${appointment.id}/measurements` }  icon={<BiCalendarStar />}>Start</Menu.Item>
+                            : <Menu.Item disabled icon={<BiCalendarStar />}>Start</Menu.Item>
+                        }
+
                         <Menu.Item icon={<AiOutlineEdit />}>Edit</Menu.Item>
                         <Divider />
                         <Menu.Item color="red" icon={<BsFillTrashFill />}>Delete</Menu.Item>
                     </Menu>
-                    
-                </span>
+
+                </div>
             </td>
         </tr>
     ));

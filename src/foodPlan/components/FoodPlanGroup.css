@@ -8,3 +8,63 @@
     gap: 1.5em;
     grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
 }
+
+.food-plan-card-header {
+    margin-bottom: 10px;
+    text-align: right;
+    
+}
+
+.ref-values-card__container {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    height: 8em;
+    column-gap: 20px;
+}
+
+.ref-values-card__container h4 {
+    margin-top: 10px;
+    margin-bottom: 8px;
+}
+
+.ref-value {
+    color: var(--highlighted-text-color);
+}
+
+
+.food-plan-group__right-column {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    row-gap: 1.5em;
+}
+
+.ref-values-card-header {
+
+}
+
+.ref-values-card {
+    padding: 20px;
+}
+
+
+.progress-card {
+    padding: 20px;
+}
+
+.progress-card h4 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.progress-card h3 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.food-plan-card {
+    margin-bottom: 30px;
+}

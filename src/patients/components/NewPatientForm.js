@@ -395,7 +395,7 @@ const NewPatientForm = props => {
                                             variant="filled"
                                             radius="md"
                                             size="xs"
-                                            style={{ marginTop: 20 }}
+                                    
                                         />
                                     </div>
 

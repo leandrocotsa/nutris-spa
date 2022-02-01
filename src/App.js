@@ -53,7 +53,7 @@ const App = () => {
           <Route path="/patients/:userId/foodplan" exact element={<FoodPlan />} />
 
           <Route path="/appointments" exact element={<Appointments />} />
-          <Route path="/appointments/new" exact element={<AppointmentMeasurements />} />
+          <Route path="/appointments/:id/measurements" exact element={<AppointmentMeasurements />} />
 
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

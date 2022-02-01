@@ -7,7 +7,7 @@
 }
 
 .ongoing-appointment-card {
-    margin-bottom: 1em;
+    margin-bottom: 30px;
 }
 
 
@@ -17,6 +17,15 @@
     margin-right: auto;
     margin-left: auto;
     
+}
+
+.ongoing-appointment-card-patient {
+    height: 280px;
+}
+
+.new-measurement-form__submit-button {
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 

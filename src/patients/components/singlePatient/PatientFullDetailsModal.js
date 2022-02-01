@@ -28,15 +28,8 @@ const PatientFullDetailsModal = props => {
             opened={props.opened}
             radius="lg"
             onClose={fullOnClose}
-
-
+            title={<h3>{editView ? "Patient details - edit" : "Patient details"}</h3>}
         >
-
-            <div className='patient-card__anamnesis-modal-header'>
-                <h3 className='green-text'>{editView ? "Patient details - edit" : "Patient details"}</h3>
-            </div>
-
-
 
             <div className='patient-card__anamnesis-container'>
 

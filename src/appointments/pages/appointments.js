@@ -94,7 +94,7 @@ const Appointments = () => {
       "nutritionistName": "Diana Costa",
       "nutritionistId": 1,
       "state": "SCHEDULED",
-      "type": "FIRST",
+      "type": "FOLLOWING",
       "notes": "string"
     },       {
       "id": 9,

@@ -10,7 +10,7 @@ let currentPos = 0;
 
 const MeasurementsCard = props => {
 
-    const [currentMeasurement, setCurrentMeasurement] = useState(props.measurements[currentPos] || '');
+    const [currentMeasurement, setCurrentMeasurement] = useState(props.measurements[currentPos]);
 
     useEffect(() => {
         currentPos = 0;
@@ -19,7 +19,7 @@ const MeasurementsCard = props => {
 
 
 
-    if (currentMeasurement === '') {
+    if (props.measurements.length === 0) {
         return (
             <div className="center">
                 <h2>No patients found.</h2>

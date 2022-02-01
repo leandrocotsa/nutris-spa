@@ -3,11 +3,12 @@ import React, { useState } from 'react';
 import Card from '../../../shared/components/UIElements/Card';
 import Avatar from '../../../shared/components/UIElements/Avatar';
 
-import { Button} from '@mantine/core';
+import { Button, Menu } from '@mantine/core';
 
 import { FaBirthdayCake, FaPhoneAlt } from 'react-icons/fa';
-import { BsGenderAmbiguous } from 'react-icons/bs';
+import { BsGenderAmbiguous, BsFillTrashFill } from 'react-icons/bs';
 import { HiMail } from 'react-icons/hi';
+import { AiOutlineEdit } from 'react-icons/ai';
 
 import PatientFullDetailsModal from './PatientFullDetailsModal'
 
@@ -35,7 +36,7 @@ const PatientCard = props => {
         <>
 
 
-            <Card className="patient-card">
+            <Card className={`patient-card ${props.className}`}>
 
                 <div className="patient-card__container-image">
                     <div className="patient-card__container-image-square">
@@ -83,9 +84,38 @@ const PatientCard = props => {
 
 
                         <div className="patient-card__buttons">
-                            <Button color='teal' variant="filled" radius="md" onClick={() => setOpened(true)}>
+                            <Button compact color='teal' variant="filled" size="xs" radius="md" onClick={() => setOpened(true)}>
                                 Full details
                             </Button>
+
+                            <Menu
+                                position="bottom"
+                                placement="center"
+                                gutter={8}
+                                withArrow
+                                control={
+                                    <Button compact color='teal' variant="filled" size="xs" radius="md">Food plan</Button>
+                                }>
+                                <Menu.Item icon={<BsFillTrashFill />}>New plan</Menu.Item>
+                                <Menu.Item icon={<AiOutlineEdit />}>Edit plan</Menu.Item>
+                                <Menu.Item color="red" icon={<BsFillTrashFill />}>Delete plan</Menu.Item>
+
+                            </Menu>
+
+
+                            <Menu
+                                position="bottom"
+                                placement="start"
+                                gutter={8}
+                                withArrow
+                                control={
+                                    <Button compact color='teal' variant="filled" size="xs" radius="md">...</Button>
+                                }>
+                                <Menu.Item color="red" icon={<BsFillTrashFill />}>Delete patient</Menu.Item>
+                            </Menu>
+
+
+
                         </div>
 
                     </>}
