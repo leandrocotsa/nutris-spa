@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
 
-import { Table, Badge, Menu, Divider } from '@mantine/core';
+import { Table, Badge, Menu, Divider, Select, TextInput, Accordion } from '@mantine/core';
+import { DateRangePicker } from '@mantine/dates';
 
 import { BsCaretDownFill, BsFillTrashFill } from 'react-icons/bs';
-import { BiCalendarStar } from 'react-icons/bi';
+import { BiCalendarStar, BiSearch } from 'react-icons/bi';
+import { FiFilter } from 'react-icons/fi';
+
 import { AiOutlineEdit } from 'react-icons/ai';
 
 
-
-
-
 import './AppointmentsTable.css';
+
+import WarningModal from '../../shared/components/FormElements/WarningModal';
+import NewAppointmentModal from './NewAppointmentModal';
 
 const reformatDate = (dateStart, dateEnd) => {
     return new Date(dateStart).toLocaleString();
@@ -20,9 +23,30 @@ const reformatDate = (dateStart, dateEnd) => {
 
 const AppointmentsTable = props => {
 
+    const [openedWarning, setOpenedWarning] = useState(false);
+    const [openedEditAppointment, setOpenedEditAppointment] = useState(false);
+    const [selectedAppointmentState, setSelectedAppointmentState] = useState('');
+    const [appointments, setAppointments] = useState(props.appointments);
+
+    useEffect(() => {
+        setAppointments((prevAppointments) => {
+            return props.appointments
+                .filter(appointment => {
+                    if(selectedAppointmentState !== null && selectedAppointmentState !== '') {
+                        return appointment.state === selectedAppointmentState;
+                    }
+                    return true;
+                }  )
+        })
+    }, [selectedAppointmentState, props.appointments])
+
+    const appointmentStateChangeHandler = (event) => {
+        setSelectedAppointmentState(event);
+    }
 
 
-    const rows = props.appointments.map((appointment) => (
+
+    const rows = appointments.map((appointment) => (
         <tr key={appointment.id}>
 
 
@@ -41,12 +65,12 @@ const AppointmentsTable = props => {
                             <Link to={`/patients/${appointment.patientId}`}>
                                 {appointment.patientName}
                             </Link>
-                            : 
+                            :
                             <>
                                 {appointment.patientName}
                             </>
                         }
-                        
+
                     </div>
                 </td>}
 
@@ -74,13 +98,13 @@ const AppointmentsTable = props => {
                         }>
 
                         {appointment.state !== "COMPLETED"
-                            ? <Menu.Item component={Link} to={appointment.type === "FIRST" ? `/patients/new` : `/appointments/${appointment.id}/measurements` }  icon={<BiCalendarStar />}>Start</Menu.Item>
+                            ? <Menu.Item component={Link} to={appointment.type === "FIRST" ? `/patients/new` : `/appointments/${appointment.id}/measurements`} icon={<BiCalendarStar />}>Start</Menu.Item>
                             : <Menu.Item disabled icon={<BiCalendarStar />}>Start</Menu.Item>
                         }
 
-                        <Menu.Item icon={<AiOutlineEdit />}>Edit</Menu.Item>
+                        <Menu.Item icon={<AiOutlineEdit />} onClick={() => setOpenedEditAppointment(true)}>Edit</Menu.Item>
                         <Divider />
-                        <Menu.Item color="red" icon={<BsFillTrashFill />}>Delete</Menu.Item>
+                        <Menu.Item color="red" icon={<BsFillTrashFill />} onClick={() => setOpenedWarning(true)}>Delete</Menu.Item>
                     </Menu>
 
                 </div>
@@ -101,24 +125,100 @@ const AppointmentsTable = props => {
 
     return (
 
-        <div className='appointments-table__container'>
+        <>
+            <WarningModal
+                opened={openedWarning}
+                onClose={() => {
+                    setOpenedWarning(false)
+                }}
+            />
 
-            <Table verticalSpacing="sm">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        {props.patientName && <th>Patient</th>}
-                        <th>Type</th>
-                        <th>State</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>{rows}</tbody>
-            </Table>
+            <NewAppointmentModal
+                opened={openedEditAppointment}
+                onClose={() => {
+                    setOpenedEditAppointment(false)
+                }}
+            />
 
-        </div>
+
+            <div className='appointments-table__container'>
+
+                {props.fullMode &&
+                    <Accordion icon={<FiFilter />} disableIconRotation>
+                        <Accordion.Item label="Filters">
+                            <div className='appointments-table__filters'>
+                                <DateRangePicker
+                                    label="Date range"
+                                    placeholder="Pick date range"
+                                    inputFormat="DD/MM/YYYY"
+                                    variant="filled"
+                                    radius="md"
+                                    size="xs"
+                                />
+                                <TextInput
+                                    label="Patient name"
+                                    placeholder="Type the patient name"
+                                    radius="md"
+                                    size="xs"
+                                    variant="filled"
+                                    icon={<BiSearch />}
+                                />
+
+                                <Select
+                                    label="Appointment type"
+                                    placeholder="Pick type"
+                                    clearable
+                                    variant="filled"
+                                    radius="md"
+                                    size="xs"
+
+                                    data={[
+                                        { value: 'FIRST', label: 'First' },
+                                        { value: 'FOLLOWING', label: 'Following' }
+                                    ]}
+                                />
+
+                                <Select
+                                    label="Appointment state"
+                                    placeholder="Pick state"
+                                    clearable
+                                    variant="filled"
+                                    radius="md"
+                                    size="xs"
+                                    value={selectedAppointmentState}
+                                    onChange={appointmentStateChangeHandler}
+                                    data={[
+                                        { value: 'COMPLETED', label: 'Completed' },
+                                        { value: 'SCHEDULED', label: 'Scheduled' }
+                                    ]}
+                                />
+                            </div>
+                        </Accordion.Item>
+                    </Accordion>
+
+                }
+
+                <Table verticalSpacing="sm">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            {props.patientName && <th>Patient</th>}
+                            <th>Type</th>
+                            <th>State</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>{rows}</tbody>
+                </Table>
+
+            </div>
+        </>
 
     );
 };
 
 export { AppointmentsTable, reformatDate };
+
+
+
+

@@ -21,6 +21,7 @@ import Patient from './patients/pages/Patient';
 import Appointments from './appointments/pages/appointments';
 import AppointmentMeasurements from './appointments/pages/AppointmentMeasurements';
 import FoodPlan from './foodPlan/pages/FoodPlan';
+import Signup from './auth/pages/Signup';
 
 
 
@@ -43,17 +44,18 @@ const App = () => {
       <main>
         <Routes>
           <Route path="/login" exact element={<Login />} />
+          <Route path="/signup" exact element={<Signup />} />
 
           <Route path="/" exact element={<MainPage />} />
 
           <Route path="/patients" exact element={<Patients />} />
-          <Route path="/patients/:userId" exact element={<Patient />} />
+          <Route path="/patients/:patientId" exact element={<Patient />} />
           <Route path="/patients/new" exact element={<NewPatient />} />
 
           <Route path="/patients/:userId/foodplan" exact element={<FoodPlan />} />
 
           <Route path="/appointments" exact element={<Appointments />} />
-          <Route path="/appointments/:id/measurements" exact element={<AppointmentMeasurements />} />
+          <Route path="/appointments/:appointmentId/measurements" exact element={<AppointmentMeasurements />} />
 
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

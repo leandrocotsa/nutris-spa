@@ -2,9 +2,32 @@ import React from 'react';
 
 import { TextInput, PasswordInput, Button } from '@mantine/core';
 
+import { useForm } from '@mantine/hooks';
+
 import './LoginGroup.css';
 
 const LoginGroup = props => {
+
+    const form = useForm({
+        initialValues: {
+            email: '',
+            password: ''
+        },
+        validationRules: {
+            email: (value) => /^\S+@\S+$/.test(value)
+        },
+        errorMessages: {
+            email: 'Invalid email'
+        },
+    });
+
+
+    const loginSubmitHandler = event => {
+        event.preventDefault();
+        form.onSubmit((values) => {
+            console.log(values); //send to server
+        });
+    }
 
 
     return (
@@ -47,11 +70,10 @@ const LoginGroup = props => {
                                 variant="filled"
                                 radius="md"
                                 size="xs"
-                                style={{ marginTop: 20 }}
                             />
                         </div>
                         <div className='login-form__submit-button'>
-                            <Button color='teal' variant="light" compact>Login</Button>
+                            <Button color='teal' variant="light" compact onClick={loginSubmitHandler}>Login</Button>
                         </div>
                     </form>
                 </div>

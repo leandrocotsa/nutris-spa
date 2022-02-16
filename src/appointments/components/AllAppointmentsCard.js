@@ -51,7 +51,7 @@ const AllAppointmentsCard = props => {
                 <div className='all-appointments-card__container'>
 
 
-                    <AppointmentsTable appointments={props.appointments} patientName={true} endDate={true}/>
+                    <AppointmentsTable appointments={props.appointments} patientName={true} endDate={true} fullMode={true}/>
 
 
 

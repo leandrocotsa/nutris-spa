@@ -6,13 +6,14 @@
     max-width: 100%;
   }
 
-.patients-list__info {
-
+.patients-list__info { 
     margin-bottom: 25px;
 }
 
 
-
+.patients-list__search-bar {
+    max-width: 500px;
+}
 
 
 .patients-list__info h1 {

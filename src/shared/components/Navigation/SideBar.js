@@ -6,7 +6,7 @@ import './SideBar.css';
 
 const SideBar = props => {
 
-    if(window.location.pathname==='/login'){
+    if(window.location.pathname==='/login' || window.location.pathname==='/signup'){
         return null;
     }   
 

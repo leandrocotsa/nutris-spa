@@ -42,7 +42,7 @@ const PatientCard = props => {
                     <div className="patient-card__container-image-square">
                         <Avatar className="patient-card__image" image={'https://images.uncyc.org/wikinet/e/eb/Nikocado_Avocado.jpg'} alt={'nico'} />
                     </div>
-                    <h2>{props.patient.fullName}</h2>
+                    <h2>{props.patient.firstName + " " + props.patient.lastName}</h2>
                 </div>
 
                 <div className='patient-card__container'>

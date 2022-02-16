@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { useForm } from '@mantine/hooks';
 
-
-import { Button, Modal, Radio, RadioGroup } from '@mantine/core';
+import { Button, Modal, Radio, RadioGroup, Select, TextInput } from '@mantine/core';
 import { DatePicker, TimeInput } from '@mantine/dates';
 
 
@@ -9,6 +9,24 @@ import './NewAppointmentModal.css';
 
 
 const NewAppointmentModal = props => {
+
+    const [value, setValue] = useState('');
+
+    const form = useForm({
+        initialValues: { 
+            date: '', 
+            startTime: '',
+            endTime: '',
+            patientId: '',
+            patientName: '',
+            radioPatient: ''
+        },
+        validationRules: {
+          name: (value) => value.trim().length >= 2,
+        },
+      });
+
+
 
     //fecth patients?
     const USERS = [
@@ -25,7 +43,7 @@ const NewAppointmentModal = props => {
         },
         {
             id: 'u2',
-            name: 'Nikocado Avocado',
+            name: 'Nikocada Avocada',
             weightGoal: '80',
             currentWeight: '98',
             weightDif: '+1',
@@ -36,6 +54,13 @@ const NewAppointmentModal = props => {
         }
     ];
 
+    const patientList = USERS.map(patient => {
+        return {
+            value: patient.id,
+            label: `${patient.name}`
+        }
+    });
+
 
 
     return (
@@ -43,11 +68,11 @@ const NewAppointmentModal = props => {
         <Modal
             centered
             overflow="inside"
-            size={450}
+            size={380}
             opened={props.opened}
             radius="lg"
             onClose={props.onClose}
-            title={<h3 className='green-text'>New appointment</h3>}
+            title={<h3>New appointment</h3>}
 
         >
             <div className='new-appointment-modal-wrapper'>
@@ -60,19 +85,32 @@ const NewAppointmentModal = props => {
                             variant="filled"
                             radius="md"
                             size="xs"
-                            style={{ marginTop: 20 }}
                             required
+                            {...form.getInputProps('date')}
                         />
                     </div>
 
 
                     <div className="new-appointment-form-item">
                         <TimeInput
-                            label="Appointment's time"
+                            label="Appointment's start time"
                             variant="filled"
                             radius="md"
                             size="xs"
                             style={{ marginTop: 20 }}
+                            {...form.getInputProps('startTime')}
+                        >
+                        </TimeInput>
+                    </div>
+
+                    <div className="new-appointment-form-item">
+                        <TimeInput
+                            label="Appointment's end time"
+                            variant="filled"
+                            radius="md"
+                            size="xs"
+                            style={{ marginTop: 20 }}
+                            {...form.getInputProps('endTime')}
                         >
                         </TimeInput>
                     </div>
@@ -84,13 +122,46 @@ const NewAppointmentModal = props => {
                             radius="md"
                             size="xs"
                             style={{ marginTop: 20 }}
+                            {...form.getInputProps('radioPatient')}
                         >
                             <Radio value="yes">Yes</Radio>
                             <Radio value="no">No</Radio>
                         </RadioGroup>
                     </div>
+
+                    {form.values.radioPatient === "yes" &&
+                        <div className="new-appointment-form-item">
+                            <Select
+                                label="Patient"
+                                placeholder="Pick one"
+                                searchable
+                                nothingFound="No patients found"
+                                variant="filled"
+                                radius="md"
+                                size="xs"
+                                style={{ marginTop: 20, marginBottom: 30 }}
+                                data={patientList}
+                                {...form.getInputProps('patientId')}
+                            />
+                        </div>
+                    }
+                    {form.values.radioPatient === "no" &&
+                        <div className="new-appointment-form-item">
+                            <TextInput
+                                placeholder="Patient's name"
+                                label="Patient's name"
+                                variant="filled"
+                                radius="md"
+                                size="xs"
+                                style={{ marginTop: 20, marginBottom: 30 }}
+                                {...form.getInputProps('patientName')}
+                            />
+                        </div>
+                    }
+
+
                     <div className="new-appointment-form__buttons">
-                        <Button color='teal' variant="outline" compact onClick={props.onClose}
+                        <Button color='teal' variant="light" compact onClick={props.onClose}
                         >Create appointment</Button>
 
                     </div>

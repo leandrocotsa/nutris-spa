@@ -40,15 +40,12 @@ const NextAppointmentCard = props => {
                 <div>
                     <h3 className='dark-gray'>Nikocado Avocado</h3>
                     <h4 className='light-gray'><FaCalendarDay /> {reformatDate(todaysAppointments[0].startDate)}</h4>
-                    <h4 className='light-gray'>Lol</h4>
+                    <h4 className='light-gray'>First appointment</h4>
                 </div>
 
                 <div className='next-appointment-card__container-buttons'>
                     <Button color='teal' variant="light" radius="md" compact >
                         Start appointment
-                    </Button>
-                    <Button color='teal' variant="light" radius="md" style={{ marginTop: 10 }} compact>
-                        <BsCaretDownFill />More options
                     </Button>
                 </div>
 

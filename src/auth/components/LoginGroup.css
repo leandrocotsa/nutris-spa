@@ -16,7 +16,7 @@
 
 .login-form-col p {
 
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 
 .login-logo-div {
@@ -70,6 +70,19 @@
 .login-form__submit-button {
     text-align: center;
     margin: 30px;
+}
+
+.signup-form__names-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    column-gap: 25px;
+}
+
+.login-form__item {
+    margin-top: 15px;
 }
 
 

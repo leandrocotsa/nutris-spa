@@ -1,41 +1,46 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
 import PatientGroup from '../components/singlePatient/PatientGroup';
 
 
 const Patient = () => {
+
+  const patientId = useParams().patientId;
+
   const patientData =
   {
     "id": 2,
-    "fullName": "Nikocado Avocado",
-    "birthDate": "1998-01-01",
+    "firstName": "Nikocado",
+    "lastName": "Avocado",
+    "birthDate": "01/01/1998",
     "phoneNumber": "912345678",
     "sex": "Male",
     "profilePicture": null,
     "familyNumber": 0,
-    "maritalStatus": "string",
+    "maritalStatus": "Married",
     "email": "niko@gmail.com",
     "anamnesis": {
-      "healthProblems": "string",
-      "medication": "string",
-      "healthBackground": "string",
-      "reasonAppointment": "string",
+      "healthProblems": "None",
+      "medication": "Benuron",
+      "healthBackground": "Cancro",
+      "reasonAppointment": "Quer ficar grosso",
       "minimalWeight": 70.0,
       "maximumWeight": 100.0,
       "desiredWeight": 75.0,
       "height": 170,
-      "activityQuotient": 0.0,
-      "allergies": "string",
-      "intestinalTransit": "string",
-      "urineColor": "string",
-      "waterConsumption": "string",
-      "coffee": "string",
-      "refrigerants": "string",
-      "weekendExceptions": "string",
-      "knowsCooking": true,
-      "wakeUpHour": "string",
-      "bedHour": "string",
-      "dailyMealsSummary": "string"
+      "activityQuotient": 1.12,
+      "allergies": "None",
+      "intestinalTransit": "Normal",
+      "urineColor": "#f20c0c",
+      "waterConsumption": "1L per day",
+      "coffee": "Never",
+      "refrigerants": "Every day",
+      "weekendExceptions": "Always mac",
+      "knowsCooking": "yes",
+      "wakeUpHour": "10:00",
+      "bedHour": "22:00",
+      "dailyMealsSummary": "Come rissois quase todos os dias e é viciado em coca cola portanto bebe em todas as refeições."
     },
     "macroNutrients": {
       "idealWeight": 65.30000000000001,

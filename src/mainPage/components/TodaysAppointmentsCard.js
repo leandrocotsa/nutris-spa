@@ -36,7 +36,7 @@ const TodaysAppointmentsCard = props => {
 
             <div className='todays-appointments-card__container'>
 
-                <AppointmentsTable appointments={props.appointments} patientName={true} endDate={true}/>
+                <AppointmentsTable appointments={props.appointments} patientName={true} endDate={false}/>
 
             </div>
 

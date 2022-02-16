@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 import { Button, Modal, Radio, RadioGroup, TextInput, Divider, Select, NumberInput, ColorInput, Textarea } from '@mantine/core';
 import { DatePicker, TimeInput } from '@mantine/dates';
+import { useForm } from '@mantine/hooks';
 
 
 import './PatientFullDetailsModal.css';
@@ -15,8 +16,49 @@ const PatientFullDetailsModal = props => {
     const fullOnClose = () => {
         props.onClose();
         seteditView(false);
+        editPatientForm.reset();
 
     };
+
+
+
+
+
+    const editPatientForm = useForm({
+        initialValues: {
+            firstName: props.patient.firstName,
+            lastName: props.patient.lastName,
+            birthDate: props.patient.birthDate,
+            phoneNumber: props.patient.phoneNumber,
+            email: props.patient.email,
+            sex: props.patient.sex,
+            familyNumber: props.patient.familyNumber,
+            maritalStatus: props.patient.maritalStatus,
+            healthProblems: props.patient.anamnesis.healthProblems,
+            medication: props.patient.anamnesis.medication,
+            reasonAppointment: props.patient.anamnesis.reasonAppointment,
+            minimalWeight: props.patient.anamnesis.minimalWeight,
+            maximumWeight: props.patient.anamnesis.maximumWeight,
+            desiredWeight: props.patient.anamnesis.desiredWeight,
+            height: props.patient.anamnesis.height,
+            activityQuotient: props.patient.anamnesis.activityQuotient,
+            allergies: props.patient.anamnesis.allergies,
+            intestinalTransit: props.patient.anamnesis.intestinalTransit,
+            urineColor: props.patient.anamnesis.urineColor,
+            waterConsumption: props.patient.anamnesis.waterConsumption,
+            coffee: props.patient.anamnesis.coffee,
+            refrigerants: props.patient.anamnesis.refrigerants,
+            weekendExceptions: props.patient.anamnesis.weekendExceptions,
+            knowsCooking: props.patient.anamnesis.knowsCooking,
+            wakeUpHour: props.patient.anamnesis.wakeUpHour,
+            bedHour: props.patient.anamnesis.bedHour,
+            dailyMealsSummary: props.patient.anamnesis.dailyMealsSummary
+        },
+
+        validationRules: {
+            email: (value) => /^\S+@\S+$/.test(value),
+        },
+    });
 
 
     return (
@@ -43,11 +85,26 @@ const PatientFullDetailsModal = props => {
 
                             <div className="anamnesis__info">
                                 <TextInput
-                                    placeholder="Patient's name"
-                                    label="Full name"
+                                    placeholder="Patient's first name"
+                                    label="First name"
                                     variant="filled"
                                     radius="md"
                                     size="xs"
+                                    required
+                                    {...editPatientForm.getInputProps('firstName')}
+                                />
+                            </div>
+
+                            <div className="anamnesis__info">
+                                <TextInput
+                                    placeholder="Patient's last name"
+                                    label="Last name"
+                                    variant="filled"
+                                    radius="md"
+                                    size="xs"
+                                    style={{ marginTop: 15 }}
+                                    required
+                                    {...editPatientForm.getInputProps('lastName')}
                                 />
                             </div>
 
@@ -56,24 +113,16 @@ const PatientFullDetailsModal = props => {
 
                                     placeholder="Pick date"
                                     label="Birth date"
+                                    inputFormat="DD/MM/YYYY"
+                                    defaultValue={new Date(editPatientForm.values.birthDate)}
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
                                     required
+                                    {...editPatientForm.getInputProps('birthDate')}
                                 />
 
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <TextInput
-                                    placeholder="Patient's email"
-                                    label="Email"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 20 }}
-                                />
                             </div>
 
                             <div className="anamnesis__info">
@@ -83,9 +132,26 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
+                                    {...editPatientForm.getInputProps('phoneNumber')}
+
                                 />
                             </div>
+
+                            <div className="anamnesis__info">
+                                <TextInput
+                                    placeholder="Patient's email"
+                                    label="Email"
+                                    variant="filled"
+                                    radius="md"
+                                    size="xs"
+                                    style={{ marginTop: 15 }}
+                                    required
+                                    {...editPatientForm.getInputProps('email')}
+                                />
+                            </div>
+
+
 
                             <div className="anamnesis__info">
                                 <Select
@@ -94,12 +160,13 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
                                     data={[
                                         { value: 'Male', label: 'Male' },
                                         { value: 'Female', label: 'Female' },
                                         { value: 'Other', label: 'Other' }
                                     ]}
+                                    {...editPatientForm.getInputProps('sex')}
                                 />
                             </div>
 
@@ -110,7 +177,8 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
+                                    {...editPatientForm.getInputProps('familyNumber')}
                                 />
                             </div>
 
@@ -121,13 +189,14 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20, marginBottom: 20 }}
+                                    style={{ marginTop: 15 }}
                                     data={[
                                         { value: 'Single', label: 'Single' },
                                         { value: 'Married', label: 'Married' },
                                         { value: 'Divorced', label: 'Divorced' },
                                         { value: 'Widowed', label: 'Widowed' }
                                     ]}
+                                    {...editPatientForm.getInputProps('maritalStatus')}
                                 />
                             </div>
 
@@ -142,6 +211,7 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
+                                    {...editPatientForm.getInputProps('healthProblems')}
 
                                 />
                             </div>
@@ -152,7 +222,8 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
+                                    {...editPatientForm.getInputProps('medication')}
                                 />
                             </div>
 
@@ -163,7 +234,8 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
+                                    {...editPatientForm.getInputProps('reasonAppointment')}
                                 />
                             </div>
 
@@ -175,7 +247,8 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
+                                    {...editPatientForm.getInputProps('minimalWeight')}
                                 />
                             </div>
 
@@ -187,7 +260,8 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
+                                    {...editPatientForm.getInputProps('maximumWeight')}
                                 />
                             </div>
 
@@ -198,7 +272,8 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
+                                    {...editPatientForm.getInputProps('desiredWeight')}
                                 />
                             </div>
 
@@ -209,7 +284,8 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
+                                    {...editPatientForm.getInputProps('height')}
                                 />
                             </div>
 
@@ -220,12 +296,14 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
                                     data={[
-                                        { value: '1.12', label: '1.12 - Light activity' },
-                                        { value: '1.29', label: '1.29 - Moderate activity' },
-                                        { value: '1.59', label: '1.59 - Intense activity' }
+                                        { value: 1.12, label: '1.12 - Light activity' },
+                                        { value: 1.29, label: '1.29 - Moderate activity' },
+                                        { value: 1.59, label: '1.59 - Intense activity' }
                                     ]}
+                                    required
+                                    {...editPatientForm.getInputProps('activityQuotient')}
                                 />
                             </div>
 
@@ -237,7 +315,8 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
+                                    {...editPatientForm.getInputProps('allergies')}
                                 />
                             </div>
 
@@ -248,7 +327,8 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
+                                    {...editPatientForm.getInputProps('intestinalTransit')}
                                 />
                             </div>
 
@@ -260,6 +340,7 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
+                                    {...editPatientForm.getInputProps('urineColor')}
                                 />
                             </div>
 
@@ -270,7 +351,8 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
+                                    {...editPatientForm.getInputProps('waterConsumption')}
                                 />
                             </div>
 
@@ -281,7 +363,8 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
+                                    {...editPatientForm.getInputProps('coffee')}
                                 />
                             </div>
 
@@ -292,7 +375,8 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
+                                    {...editPatientForm.getInputProps('refrigerants')}
                                 />
                             </div>
 
@@ -304,7 +388,8 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
+                                    {...editPatientForm.getInputProps('weekendExceptions')}
                                 />
                             </div>
 
@@ -314,7 +399,8 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
+                                    {...editPatientForm.getInputProps('knowsCooking')}
                                 >
                                     <Radio value="yes">Yes</Radio>
                                     <Radio value="no">No</Radio>
@@ -326,9 +412,11 @@ const PatientFullDetailsModal = props => {
                                 <TimeInput
                                     label="Wake-up time"
                                     variant="filled"
+                                    defaultValue={new Date("1111-11-11T" + editPatientForm.values.wakeUpHour)}
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
+            
                                 >
                                 </TimeInput>
                             </div>
@@ -337,9 +425,11 @@ const PatientFullDetailsModal = props => {
                                 <TimeInput
                                     label="Bed time"
                                     variant="filled"
+                                    defaultValue={new Date("1111-11-11T" + editPatientForm.values.bedHour)}
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20 }}
+                                    style={{ marginTop: 15 }}
+                                
                                 >
                                 </TimeInput>
                             </div>
@@ -356,7 +446,8 @@ const PatientFullDetailsModal = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-                                    style={{ marginTop: 20, marginBottom: 30 }}
+                                    style={{ marginTop: 15 }}
+                                    {...editPatientForm.getInputProps('dailyMealsSummary')}
                                 />
 
 

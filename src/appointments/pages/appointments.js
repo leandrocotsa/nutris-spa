@@ -52,7 +52,7 @@ const Appointments = () => {
       "notes": "string"
     },       {
       "id": 5,
-      "startDate": "2022-01-27T10:00:00.000Z",
+      "startDate": "2022-01-26T10:00:00.000Z",
       "endDate": "2022-01-27T12:00:00.000Z",
       "patientName": "Ana",
       "patientId": 2,
@@ -75,7 +75,7 @@ const Appointments = () => {
       "notes": "string"
     },       {
       "id": 7,
-      "startDate": "2022-01-27T10:00:00.000Z",
+      "startDate": "2022-01-25T10:00:00.000Z",
       "endDate": "2022-01-27T12:00:00.000Z",
       "patientName": "Ana",
       "patientId": 2,
