@@ -18,7 +18,7 @@ import WarningModal from '../../shared/components/FormElements/WarningModal';
 import NewAppointmentModal from './NewAppointmentModal';
 
 const reformatDate = (dateStart, dateEnd) => {
-    return new Date(dateStart).toLocaleString();
+    return new Date(dateStart).toLocaleString().replace(/AM|PM/,'') ;
 };
 
 const AppointmentsTable = props => {
