@@ -15,45 +15,101 @@ import { AiOutlineEdit } from 'react-icons/ai';
 import './AppointmentsTable.css';
 
 import WarningModal from '../../shared/components/FormElements/WarningModal';
-import NewAppointmentModal from './NewAppointmentModal';
+import { useForm } from '@mantine/hooks';
+import EditAppointmentModal from './EditAppointmentModal';
+import { useHttpClient } from '../../shared/hooks/http-hook';
 
 const reformatDate = (dateStart, dateEnd) => {
-    return new Date(dateStart).toLocaleString().replace(/AM|PM/,'') ;
+    return new Date(dateStart).toLocaleString().replace(/AM|PM/, '');
 };
 
+
 const AppointmentsTable = props => {
+
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+    //dois useEffect
+    //um para obter os appintemnts todos da nutricionista
+    // outro para fazer os filtros
+
+
 
     const [openedWarning, setOpenedWarning] = useState(false);
     const [openedEditAppointment, setOpenedEditAppointment] = useState(false);
     const [selectedAppointmentState, setSelectedAppointmentState] = useState('');
-    const [appointments, setAppointments] = useState(props.appointments);
+    const [selectedAppointmentType, setSelectedAppointmentType] = useState('');
+    const [enteredSearchText, setEnteredSearchText] = useState('');
+    const [selectedAppointment, setSelectedAppointment] = useState({});
+
+
+    const [currentAppointments, setCurrentAppointments] = useState([]);
+
+
+
+
+
+
 
     useEffect(() => {
-        setAppointments((prevAppointments) => {
-            return props.appointments
-                .filter(appointment => {
-                    if(selectedAppointmentState !== null && selectedAppointmentState !== '') {
-                        return appointment.state === selectedAppointmentState;
-                    }
-                    return true;
-                }  )
-        })
-    }, [selectedAppointmentState, props.appointments])
+
+        setCurrentAppointments(props.appointments
+            .filter(appointment => {
+                if (selectedAppointmentState !== null && selectedAppointmentState !== '') {
+                    return (appointment.state === selectedAppointmentState)
+                } return true;
+
+            })
+            .filter(appointment => {
+                if (selectedAppointmentType !== null && selectedAppointmentType !== '') {
+                    return (appointment.type === selectedAppointmentType)
+                } return true;
+
+            }))
+        //filters
+        //set current appointemnts
+
+    }, [selectedAppointmentState, selectedAppointmentType, enteredSearchText, props.appointments]);
+
+
+
+    const deleteAppointment = async (appointmentId) => {
+
+        try {
+            await sendRequest(
+                'http://localhost:8080/appointments/' + appointmentId,
+                'DELETE',
+                null,
+                {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY0NTcxNTg0MCwiaWF0IjoxNjM3MDc1ODQwLCJqdGkiOiIxIn0.Hj9vs2H_BWjFnQax6x51dqtK4io3_oHpZc57R0OZuYaDCKEyidtZfSXS1SREupJTNl3nWZznA69Al6JaWJDK-w'
+                }
+            );
+        } catch (err) {
+
+        }
+    }
+
+
+
 
     const appointmentStateChangeHandler = (event) => {
         setSelectedAppointmentState(event);
     }
 
 
+    const appointmentTypeChangeHandler = (event) => {
+        setSelectedAppointmentType(event);
+    }
 
-    const rows = appointments.map((appointment) => (
+
+    const rows = currentAppointments.map((appointment) => (
         <tr key={appointment.id}>
 
 
 
             {props.endDate
-                ? <td>{reformatDate(appointment.startDate) + "/"}<br />{reformatDate(appointment.endDate)}</td>
-                : <td>{reformatDate(appointment.startDate)}</td>
+                ? <td>{reformatDate(appointment.startTime) + "/"}<br />{reformatDate(appointment.endTime)}</td>
+                : <td>{reformatDate(appointment.startTime)}</td>
             }
 
             {props.patientName &&
@@ -92,7 +148,7 @@ const AppointmentsTable = props => {
                         withArrow
                         control={
                             <div>
-                                <BsCaretDownFill />
+                                <BsCaretDownFill onClick={() => setSelectedAppointment(appointment)} />
                             </div>
 
                         }>
@@ -114,30 +170,29 @@ const AppointmentsTable = props => {
 
 
 
-    if (props.appointments.length === 0) {
-        return (
-            <div className="center">
-                <h2>No patients found.</h2>
-            </div>
-        );
-    }
+
 
 
     return (
 
-        <>
+
+
+        <React.Fragment>
             <WarningModal
                 opened={openedWarning}
                 onClose={() => {
                     setOpenedWarning(false)
                 }}
+                onConfirm={deleteAppointment}
+                toDelete={selectedAppointment}
             />
 
-            <NewAppointmentModal
+            <EditAppointmentModal
                 opened={openedEditAppointment}
                 onClose={() => {
                     setOpenedEditAppointment(false)
                 }}
+                appointment={selectedAppointment}
             />
 
 
@@ -154,6 +209,7 @@ const AppointmentsTable = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
+
                                 />
                                 <TextInput
                                     label="Patient name"
@@ -162,6 +218,8 @@ const AppointmentsTable = props => {
                                     size="xs"
                                     variant="filled"
                                     icon={<BiSearch />}
+
+
                                 />
 
                                 <Select
@@ -171,11 +229,13 @@ const AppointmentsTable = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
-
+                                    value={selectedAppointmentType}
+                                    onChange={appointmentTypeChangeHandler}
                                     data={[
                                         { value: 'FIRST', label: 'First' },
                                         { value: 'FOLLOWING', label: 'Following' }
                                     ]}
+
                                 />
 
                                 <Select
@@ -191,6 +251,7 @@ const AppointmentsTable = props => {
                                         { value: 'COMPLETED', label: 'Completed' },
                                         { value: 'SCHEDULED', label: 'Scheduled' }
                                     ]}
+
                                 />
                             </div>
                         </Accordion.Item>
@@ -211,8 +272,10 @@ const AppointmentsTable = props => {
                     <tbody>{rows}</tbody>
                 </Table>
 
+                {currentAppointments.length === 0 && <p className='center empty-warning'>No appointments found!</p>}
+
             </div>
-        </>
+        </React.Fragment>
 
     );
 };

@@ -9,7 +9,14 @@ import './WarningModal.css';
 
 const WarningModal = props => {
 
+    const confirmHandler  = async () => {
+        await props.onConfirm(props.toDelete.id);
+        props.onClose();
+    }
+
     return (
+
+       
 
         <Modal
             centered
@@ -26,7 +33,7 @@ const WarningModal = props => {
                     <Button color='teal' variant="light" compact onClick={props.onClose}>
                         Cancel
                     </Button>
-                    <Button color='red' variant="light" compact onClick={props.onClose}>
+                    <Button color='red' variant="light" compact onClick={confirmHandler}>
                         Delete
                     </Button>
                 </div>

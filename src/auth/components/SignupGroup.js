@@ -1,14 +1,23 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 
-import { TextInput, PasswordInput, Button } from '@mantine/core';
+import { TextInput, PasswordInput, Button, Loader } from '@mantine/core';
 import { useForm } from '@mantine/hooks';
 
 import './LoginGroup.css';
+import { AuthContext } from '../../shared/context/auth-context';
+import { useHttpClient } from '../../shared/hooks/http-hook';
 
 const SignupGroup = props => {
 
+    const auth = useContext(AuthContext);
+
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const [isEmailAvailable, setIsEmailAvailable] = useState(true);
+
     const form = useForm({
         initialValues: {
+            firstName: '',
+            lastName: '',
             email: '',
             password: '',
             confirmPassword: ''
@@ -28,22 +37,44 @@ const SignupGroup = props => {
     //quando verificar no server se o email existe faço form.setErrors nessa situação
 
 
-    const signUpHander = event => {
+    const signUpHandler = async event => {
         event.preventDefault();
-        form.onSubmit((values) => {
-            console.log(values); //send to server
-        });
+
+
+        try {
+            await sendRequest(
+                'http://localhost:8080/nutritionists/register',
+                'POST',
+                JSON.stringify(form.values),
+                {
+                    'Content-Type': 'application/json'
+                }
+            );
+            auth.login();
+        } catch (err) {
+
+        }
     }
+
+    const emailExistsVerification = (async () => {
+        form.validateField('email');
+
+        try {
+            const responseData = await sendRequest(
+                'http://localhost:8080/login/exists?email=' + form.values.email
+            );
+            setIsEmailAvailable(responseData);
+        } catch (err) {
+
+        }
+
+    });
 
 
 
     return (
 
         <div className="login-page-container">
-
-
-
-
 
             <div className="login-form-col">
 
@@ -58,7 +89,7 @@ const SignupGroup = props => {
                     <h1>Register</h1>
                     <p>Welcome to Nutris, an application that let's you.</p>
 
-                    <form className="login-form" onSubmit={signUpHander}>
+                    <form className="login-form" onSubmit={signUpHandler}>
                         <div className='signup-form__names-row'>
 
                             <div className="login-form__item">
@@ -69,6 +100,7 @@ const SignupGroup = props => {
                                     radius="md"
                                     size="xs"
                                     required
+                                    {...form.getInputProps('firstName')}
                                 />
                             </div>
 
@@ -80,6 +112,7 @@ const SignupGroup = props => {
                                     radius="md"
                                     size="xs"
                                     required
+                                    {...form.getInputProps('lastName')}
                                 />
                             </div>
 
@@ -92,10 +125,11 @@ const SignupGroup = props => {
                                 variant="filled"
                                 radius="md"
                                 size="xs"
-                                onBlur={() => form.validateField('email')}
+                                onBlur={emailExistsVerification}
                                 {...form.getInputProps('email')}
                                 required
                             />
+                            {!isEmailAvailable && <p>Email not available</p>}
                         </div>
 
 
@@ -128,7 +162,8 @@ const SignupGroup = props => {
                         </div>
 
                         <div className='login-form__submit-button'>
-                            <Button type="submit" color='teal' variant="light" compact>Sign up</Button>
+                            <Button type="submit" color='teal' variant="light" compact>Sign up{isLoading && <> &nbsp; <Loader color="teal" size="sm" variant="dots" /></>}</Button>
+                            {error && <p className='login-form__error-message'>{error}</p>}
                         </div>
                     </form>
                 </div>

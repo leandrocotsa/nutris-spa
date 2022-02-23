@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 
-import { TextInput, PasswordInput, Button } from '@mantine/core';
+import { TextInput, PasswordInput, Button, Loader } from '@mantine/core';
 
 import { useForm } from '@mantine/hooks';
 
 import './LoginGroup.css';
+import { AuthContext } from '../../shared/context/auth-context';
+import { useHttpClient } from '../../shared/hooks/http-hook';
 
 const LoginGroup = props => {
+
+    const auth = useContext(AuthContext);
+
+
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
 
     const form = useForm({
         initialValues: {
@@ -22,21 +30,33 @@ const LoginGroup = props => {
     });
 
 
-    const loginSubmitHandler = event => {
+
+
+
+    const loginSubmitHandler = async event => {
         event.preventDefault();
-        form.onSubmit((values) => {
-            console.log(values); //send to server
-        });
+
+        try {
+            await sendRequest(
+                'http://localhost:8080/login',
+                'POST',
+                JSON.stringify(form.values),
+                {
+                    'Content-Type': 'application/json'
+                }
+            );
+            auth.login();
+        } catch (err) {
+
+        }
+
+
     }
 
 
     return (
 
         <div className="login-page-container">
-
-
-
-
 
             <div className="login-form-col">
 
@@ -51,7 +71,7 @@ const LoginGroup = props => {
                     <h1>Login</h1>
                     <p>Welcome to Nutris, an application that let's you.</p>
 
-                    <form className="login-form">
+                    <form className="login-form" onSubmit={loginSubmitHandler}>
                         <div className="login-form__item">
                             <TextInput
                                 placeholder="Insert your email"
@@ -59,6 +79,7 @@ const LoginGroup = props => {
                                 variant="filled"
                                 radius="md"
                                 size="xs"
+                                {...form.getInputProps('email')}
                             />
                         </div>
 
@@ -70,10 +91,12 @@ const LoginGroup = props => {
                                 variant="filled"
                                 radius="md"
                                 size="xs"
+                                {...form.getInputProps('password')}
                             />
                         </div>
                         <div className='login-form__submit-button'>
-                            <Button color='teal' variant="light" compact onClick={loginSubmitHandler}>Login</Button>
+                            <Button color='teal' variant="light" compact type="submit">Login{isLoading && <> &nbsp; <Loader color="teal" size="sm" variant="dots" /></>}</Button>
+                            {error && <p className='login-form__error-message'>Invalid credentials</p>}
                         </div>
                     </form>
                 </div>

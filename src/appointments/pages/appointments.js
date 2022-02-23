@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import AppointmentsGroup from '../components/AppointmentsGroup';
 
 const Appointments = () => {
+
+
+
   const APPS = [
     {
       "id": 1,
@@ -38,6 +41,7 @@ const Appointments = () => {
       "state": "COMPLETED",
       "type": "FIRST",
       "notes": "string"
+
     },
     {
       "id": 4,

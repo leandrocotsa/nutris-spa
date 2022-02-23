@@ -11,11 +11,11 @@ import './PatientFullDetailsModal.css';
 
 const PatientFullDetailsModal = props => {
 
-    const [editView, seteditView] = useState(false);
+    const [editView, setEditView] = useState(false);
 
     const fullOnClose = () => {
         props.onClose();
-        seteditView(false);
+        setEditView(false);
         editPatientForm.reset();
 
     };
@@ -77,390 +77,393 @@ const PatientFullDetailsModal = props => {
 
                 {editView
                     ? <>
-                        <div className='patient-card__anamnesis-modal-edit'>
+                        <form onSubmit={editPatientForm.onSubmit((values) => console.log(values))}>
+                            <div className='patient-card__anamnesis-modal-edit'>
 
-                            <div className="anamnesis__info">
-                                <Divider my="xs" label="Basic information" />
+                                <div className="anamnesis__info">
+                                    <Divider my="xs" label="Basic information" />
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <TextInput
+                                        placeholder="Patient's first name"
+                                        label="First name"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        required
+                                        {...editPatientForm.getInputProps('firstName')}
+                                    />
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <TextInput
+                                        placeholder="Patient's last name"
+                                        label="Last name"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        required
+                                        {...editPatientForm.getInputProps('lastName')}
+                                    />
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <DatePicker
+
+                                        placeholder="Pick date"
+                                        label="Birth date"
+                                        inputFormat="DD/MM/YYYY"
+                                        defaultValue={new Date(editPatientForm.values.birthDate)}
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        required
+                                        {...editPatientForm.getInputProps('birthDate')}
+                                    />
+
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <TextInput
+                                        placeholder="Patient's phone number"
+                                        label="Phone number"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        {...editPatientForm.getInputProps('phoneNumber')}
+
+                                    />
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <TextInput
+                                        placeholder="Patient's email"
+                                        label="Email"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        required
+                                        {...editPatientForm.getInputProps('email')}
+                                    />
+                                </div>
+
+
+
+                                <div className="anamnesis__info">
+                                    <Select
+                                        label="Gender"
+                                        placeholder="Pick one"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        data={[
+                                            { value: 'Male', label: 'Male' },
+                                            { value: 'Female', label: 'Female' },
+                                            { value: 'Other', label: 'Other' }
+                                        ]}
+                                        {...editPatientForm.getInputProps('sex')}
+                                    />
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <NumberInput
+                                        placeholder="Number of family elements at home"
+                                        label="Familiy number"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        {...editPatientForm.getInputProps('familyNumber')}
+                                    />
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <Select
+                                        label="Marital status"
+                                        placeholder="Pick one"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        data={[
+                                            { value: 'Single', label: 'Single' },
+                                            { value: 'Married', label: 'Married' },
+                                            { value: 'Divorced', label: 'Divorced' },
+                                            { value: 'Widowed', label: 'Widowed' }
+                                        ]}
+                                        {...editPatientForm.getInputProps('maritalStatus')}
+                                    />
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <Divider my="xs" label="Anamnesis" />
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <TextInput
+                                        placeholder="Patient's health problems"
+                                        label="Health problems"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        {...editPatientForm.getInputProps('healthProblems')}
+
+                                    />
+                                </div>
+                                <div className="anamnesis__info">
+                                    <TextInput
+                                        placeholder="Medication taken by the patient"
+                                        label="Medication"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        {...editPatientForm.getInputProps('medication')}
+                                    />
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <TextInput
+                                        placeholder="Patient's reason for the appointment"
+                                        label="Reason for appointment"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        {...editPatientForm.getInputProps('reasonAppointment')}
+                                    />
+                                </div>
+
+
+                                <div className="anamnesis__info">
+                                    <NumberInput
+                                        placeholder="Patient's minimal weight"
+                                        label="Minimal weight (in kg)"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        {...editPatientForm.getInputProps('minimalWeight')}
+                                    />
+                                </div>
+
+
+                                <div className="anamnesis__info">
+                                    <NumberInput
+                                        placeholder="Patient's maximum weight"
+                                        label="Maximum weight (in kg)"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        {...editPatientForm.getInputProps('maximumWeight')}
+                                    />
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <NumberInput
+                                        placeholder="Patient's desired weight"
+                                        label="Desired weight (in kg)"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        {...editPatientForm.getInputProps('desiredWeight')}
+                                    />
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <NumberInput
+                                        placeholder="Patient's height"
+                                        label="Height (in cm)"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        {...editPatientForm.getInputProps('height')}
+                                    />
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <Select
+                                        label="Activity quotient"
+                                        placeholder="Pick one"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        data={[
+                                            { value: 1.12, label: '1.12 - Light activity' },
+                                            { value: 1.29, label: '1.29 - Moderate activity' },
+                                            { value: 1.59, label: '1.59 - Intense activity' }
+                                        ]}
+                                        required
+                                        {...editPatientForm.getInputProps('activityQuotient')}
+                                    />
+                                </div>
+
+
+                                <div className="anamnesis__info">
+                                    <TextInput
+                                        placeholder="Patient's allergies"
+                                        label="Allergies"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        {...editPatientForm.getInputProps('allergies')}
+                                    />
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <TextInput
+                                        placeholder="Patient's intestinal transit"
+                                        label="Intestinal transit"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        {...editPatientForm.getInputProps('intestinalTransit')}
+                                    />
+                                </div>
+
+
+                                <div className="anamnesis__info">
+                                    <ColorInput
+                                        placeholder="Pick color"
+                                        label="Urine color"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        {...editPatientForm.getInputProps('urineColor')}
+                                    />
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <TextInput
+                                        placeholder="Patient's water consumption"
+                                        label="Water consumption"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        {...editPatientForm.getInputProps('waterConsumption')}
+                                    />
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <TextInput
+                                        placeholder="Patient's coffee consumption"
+                                        label="Coffee consumption"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        {...editPatientForm.getInputProps('coffee')}
+                                    />
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <TextInput
+                                        placeholder="Patient's refrigerants consumption"
+                                        label="Refrigerants consumption"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        {...editPatientForm.getInputProps('refrigerants')}
+                                    />
+                                </div>
+
+
+                                <div className="anamnesis__info">
+                                    <TextInput
+                                        placeholder="Patient's weekend exceptions"
+                                        label="Weekend exceptions"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        {...editPatientForm.getInputProps('weekendExceptions')}
+                                    />
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <RadioGroup
+                                        label="Can the patient cook?"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        {...editPatientForm.getInputProps('knowsCooking')}
+                                    >
+                                        <Radio value="yes">Yes</Radio>
+                                        <Radio value="no">No</Radio>
+                                    </RadioGroup>
+                                </div>
+
+
+                                <div className="anamnesis__info">
+                                    <TimeInput
+                                        label="Wake-up time"
+                                        variant="filled"
+                                        defaultValue={new Date("1111-11-11T" + editPatientForm.values.wakeUpHour)}
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+
+                                    >
+                                    </TimeInput>
+                                </div>
+
+                                <div className="anamnesis__info">
+                                    <TimeInput
+                                        label="Bed time"
+                                        variant="filled"
+                                        defaultValue={new Date("1111-11-11T" + editPatientForm.values.bedHour)}
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+
+                                    >
+                                    </TimeInput>
+                                </div>
+
+
+
+
+
+                                <div className="anamnesis__info">
+
+                                    <Textarea
+                                        placeholder="Patient's daily meals summary"
+                                        label="Daily meals summary"
+                                        variant="filled"
+                                        radius="md"
+                                        size="xs"
+                                        style={{ marginTop: 15 }}
+                                        {...editPatientForm.getInputProps('dailyMealsSummary')}
+                                    />
+
+
+                                </div>
+
+
+
+
+                            </div>
+                            <div className="patient-card__buttons">
+                                <Button color='teal' variant="outline" compact type='submit'>Submit</Button>
+
                             </div>
 
-                            <div className="anamnesis__info">
-                                <TextInput
-                                    placeholder="Patient's first name"
-                                    label="First name"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    required
-                                    {...editPatientForm.getInputProps('firstName')}
-                                />
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <TextInput
-                                    placeholder="Patient's last name"
-                                    label="Last name"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    required
-                                    {...editPatientForm.getInputProps('lastName')}
-                                />
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <DatePicker
-
-                                    placeholder="Pick date"
-                                    label="Birth date"
-                                    inputFormat="DD/MM/YYYY"
-                                    defaultValue={new Date(editPatientForm.values.birthDate)}
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    required
-                                    {...editPatientForm.getInputProps('birthDate')}
-                                />
-
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <TextInput
-                                    placeholder="Patient's phone number"
-                                    label="Phone number"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    {...editPatientForm.getInputProps('phoneNumber')}
-
-                                />
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <TextInput
-                                    placeholder="Patient's email"
-                                    label="Email"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    required
-                                    {...editPatientForm.getInputProps('email')}
-                                />
-                            </div>
-
-
-
-                            <div className="anamnesis__info">
-                                <Select
-                                    label="Gender"
-                                    placeholder="Pick one"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    data={[
-                                        { value: 'Male', label: 'Male' },
-                                        { value: 'Female', label: 'Female' },
-                                        { value: 'Other', label: 'Other' }
-                                    ]}
-                                    {...editPatientForm.getInputProps('sex')}
-                                />
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <NumberInput
-                                    placeholder="Number of family elements at home"
-                                    label="Familiy number"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    {...editPatientForm.getInputProps('familyNumber')}
-                                />
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <Select
-                                    label="Marital status"
-                                    placeholder="Pick one"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    data={[
-                                        { value: 'Single', label: 'Single' },
-                                        { value: 'Married', label: 'Married' },
-                                        { value: 'Divorced', label: 'Divorced' },
-                                        { value: 'Widowed', label: 'Widowed' }
-                                    ]}
-                                    {...editPatientForm.getInputProps('maritalStatus')}
-                                />
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <Divider my="xs" label="Anamnesis" />
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <TextInput
-                                    placeholder="Patient's health problems"
-                                    label="Health problems"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    {...editPatientForm.getInputProps('healthProblems')}
-
-                                />
-                            </div>
-                            <div className="anamnesis__info">
-                                <TextInput
-                                    placeholder="Medication taken by the patient"
-                                    label="Medication"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    {...editPatientForm.getInputProps('medication')}
-                                />
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <TextInput
-                                    placeholder="Patient's reason for the appointment"
-                                    label="Reason for appointment"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    {...editPatientForm.getInputProps('reasonAppointment')}
-                                />
-                            </div>
-
-
-                            <div className="anamnesis__info">
-                                <NumberInput
-                                    placeholder="Patient's minimal weight"
-                                    label="Minimal weight (in kg)"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    {...editPatientForm.getInputProps('minimalWeight')}
-                                />
-                            </div>
-
-
-                            <div className="anamnesis__info">
-                                <NumberInput
-                                    placeholder="Patient's maximum weight"
-                                    label="Maximum weight (in kg)"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    {...editPatientForm.getInputProps('maximumWeight')}
-                                />
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <NumberInput
-                                    placeholder="Patient's desired weight"
-                                    label="Desired weight (in kg)"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    {...editPatientForm.getInputProps('desiredWeight')}
-                                />
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <NumberInput
-                                    placeholder="Patient's height"
-                                    label="Height (in cm)"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    {...editPatientForm.getInputProps('height')}
-                                />
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <Select
-                                    label="Activity quotient"
-                                    placeholder="Pick one"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    data={[
-                                        { value: 1.12, label: '1.12 - Light activity' },
-                                        { value: 1.29, label: '1.29 - Moderate activity' },
-                                        { value: 1.59, label: '1.59 - Intense activity' }
-                                    ]}
-                                    required
-                                    {...editPatientForm.getInputProps('activityQuotient')}
-                                />
-                            </div>
-
-
-                            <div className="anamnesis__info">
-                                <TextInput
-                                    placeholder="Patient's allergies"
-                                    label="Allergies"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    {...editPatientForm.getInputProps('allergies')}
-                                />
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <TextInput
-                                    placeholder="Patient's intestinal transit"
-                                    label="Intestinal transit"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    {...editPatientForm.getInputProps('intestinalTransit')}
-                                />
-                            </div>
-
-
-                            <div className="anamnesis__info">
-                                <ColorInput
-                                    placeholder="Pick color"
-                                    label="Urine color"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    {...editPatientForm.getInputProps('urineColor')}
-                                />
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <TextInput
-                                    placeholder="Patient's water consumption"
-                                    label="Water consumption"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    {...editPatientForm.getInputProps('waterConsumption')}
-                                />
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <TextInput
-                                    placeholder="Patient's coffee consumption"
-                                    label="Coffee consumption"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    {...editPatientForm.getInputProps('coffee')}
-                                />
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <TextInput
-                                    placeholder="Patient's refrigerants consumption"
-                                    label="Refrigerants consumption"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    {...editPatientForm.getInputProps('refrigerants')}
-                                />
-                            </div>
-
-
-                            <div className="anamnesis__info">
-                                <TextInput
-                                    placeholder="Patient's weekend exceptions"
-                                    label="Weekend exceptions"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    {...editPatientForm.getInputProps('weekendExceptions')}
-                                />
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <RadioGroup
-                                    label="Can the patient cook?"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    {...editPatientForm.getInputProps('knowsCooking')}
-                                >
-                                    <Radio value="yes">Yes</Radio>
-                                    <Radio value="no">No</Radio>
-                                </RadioGroup>
-                            </div>
-
-
-                            <div className="anamnesis__info">
-                                <TimeInput
-                                    label="Wake-up time"
-                                    variant="filled"
-                                    defaultValue={new Date("1111-11-11T" + editPatientForm.values.wakeUpHour)}
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-            
-                                >
-                                </TimeInput>
-                            </div>
-
-                            <div className="anamnesis__info">
-                                <TimeInput
-                                    label="Bed time"
-                                    variant="filled"
-                                    defaultValue={new Date("1111-11-11T" + editPatientForm.values.bedHour)}
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                
-                                >
-                                </TimeInput>
-                            </div>
-
-
-
-
-
-                            <div className="anamnesis__info">
-
-                                <Textarea
-                                    placeholder="Patient's daily meals summary"
-                                    label="Daily meals summary"
-                                    variant="filled"
-                                    radius="md"
-                                    size="xs"
-                                    style={{ marginTop: 15 }}
-                                    {...editPatientForm.getInputProps('dailyMealsSummary')}
-                                />
-
-
-                            </div>
-
-
-
-
-                        </div>
-                        <div className="patient-card__buttons">
-                            <Button color='teal' variant="outline" compact onClick={fullOnClose}>Submit</Button>
-
-                        </div>
+                        </form>
 
                     </>
                     :
@@ -572,7 +575,7 @@ const PatientFullDetailsModal = props => {
 
                         </div>
                         <div className="patient-card__buttons">
-                            <Button color='teal' variant="outline" compact onClick={() => seteditView(true)}>Edit</Button>
+                            <Button color='teal' variant="outline" compact onClick={() => setEditView(true)}>Edit</Button>
                         </div>
                     </>}
 

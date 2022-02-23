@@ -1,20 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from '@mantine/hooks';
+
+import { useParams, useNavigate } from 'react-router-dom';
 
 import { Button, Modal, Radio, RadioGroup, Select, TextInput } from '@mantine/core';
 import { DatePicker, TimeInput } from '@mantine/dates';
 
 
 import './NewAppointmentModal.css';
+import { useHttpClient } from '../../shared/hooks/http-hook';
 
 
 const NewAppointmentModal = props => {
 
-    const [value, setValue] = useState('');
+    const [loadedPatients, setLoadedPatients] = useState([]);
 
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+    const navigate = useNavigate();
+
+    //verificar se é modal de update ou create appointment 
+    
     const form = useForm({
-        initialValues: { 
-            date: '', 
+        initialValues: {
+            date: '',
             startTime: '',
             endTime: '',
             patientId: '',
@@ -22,44 +31,90 @@ const NewAppointmentModal = props => {
             radioPatient: ''
         },
         validationRules: {
-          name: (value) => value.trim().length >= 2,
+            name: (value) => value.trim().length >= 2,
         },
-      });
-
-
-
-    //fecth patients?
-    const USERS = [
-        {
-            id: 'u1',
-            name: 'Nikocado Avocado',
-            weightGoal: '80',
-            currentWeight: '98',
-            weightDif: '-2',
-            birthDate: '25/04/1998',
-            lastAppointment: '22/09/2020',
-            image:
-                'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260'
-        },
-        {
-            id: 'u2',
-            name: 'Nikocada Avocada',
-            weightGoal: '80',
-            currentWeight: '98',
-            weightDif: '+1',
-            birthDate: '25/04/1998',
-            lastAppointment: '22/09/2020',
-            image:
-                'https://images.pexels.com/photos/839011/pexels-photo-839011.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260'
-        }
-    ];
-
-    const patientList = USERS.map(patient => {
-        return {
-            value: patient.id,
-            label: `${patient.name}`
-        }
     });
+
+
+
+    useEffect(() => {
+
+        if (form.values.radioPatient === "yes" && loadedPatients.length === 0) {
+            const fetchPatients = async () => { //not a good practice to turn useEffect into async so this is the way to go
+
+                try {
+                    const responseData = await sendRequest(
+                        'http://localhost:8080/patients',
+                        'GET', null,
+                        {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY0NTcxNTg0MCwiaWF0IjoxNjM3MDc1ODQwLCJqdGkiOiIxIn0.Hj9vs2H_BWjFnQax6x51dqtK4io3_oHpZc57R0OZuYaDCKEyidtZfSXS1SREupJTNl3nWZznA69Al6JaWJDK-w'
+                        }
+                    );
+
+                    setLoadedPatients(responseData.map(patient => {
+                        return {
+                            value: patient.id,
+                            label: patient.fullName
+                        }
+                    }));
+
+                    
+                } catch (err) {
+
+                }
+            };
+            fetchPatients();
+
+        }
+
+        //first fetch with all appointments
+        //set dos appointments no current
+        //props que faz fazer fetch de tudo ou so dos de hoje?
+    }, [form.values.radioPatient, loadedPatients.length, sendRequest]);
+
+
+
+    const createAppointmentHandler = async (event) => {
+        event.preventDefault();
+
+        const date = new Date(form.values.date).toISOString();
+        const cleanDate = date.substring(0, date.indexOf('T'));
+
+
+        const start = new Date(form.values.startTime).toISOString();
+        const startTime =start.substring(start.indexOf("T") + 1);
+        const end = new Date(form.values.endTime).toISOString();
+        const endTime =end.substring(end.indexOf("T") + 1);
+
+
+        const newAppointment = {
+            startTime: `${cleanDate}T${startTime}`,
+            endTime: `${cleanDate}T${endTime}`,
+            type: form.values.radioPatient === "yes" ? "FOLLOWING" : "FIRST",
+            patientName: form.values.radioPatient === "yes" ? null : form.values.patientName,
+            patientId: form.values.radioPatient === "yes" ? form.values.patientId : null
+        }
+
+
+        try {
+            await sendRequest(
+                'http://localhost:8080/appointments',
+                'POST',
+                JSON.stringify(newAppointment),
+                {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY0NTcxNTg0MCwiaWF0IjoxNjM3MDc1ODQwLCJqdGkiOiIxIn0.Hj9vs2H_BWjFnQax6x51dqtK4io3_oHpZc57R0OZuYaDCKEyidtZfSXS1SREupJTNl3nWZznA69Al6JaWJDK-w'
+
+                }
+            );
+            console.log(newAppointment);
+            navigate("/");
+        } catch (err) {
+
+        }
+
+    }
 
 
 
@@ -76,7 +131,7 @@ const NewAppointmentModal = props => {
 
         >
             <div className='new-appointment-modal-wrapper'>
-                <form className='new-appointment-form'>
+                <form className='new-appointment-form' onSubmit={createAppointmentHandler}>
                     <div className="new-appointment-form-item">
                         <DatePicker
 
@@ -140,7 +195,7 @@ const NewAppointmentModal = props => {
                                 radius="md"
                                 size="xs"
                                 style={{ marginTop: 20, marginBottom: 30 }}
-                                data={patientList}
+                                data={loadedPatients}
                                 {...form.getInputProps('patientId')}
                             />
                         </div>
@@ -161,7 +216,7 @@ const NewAppointmentModal = props => {
 
 
                     <div className="new-appointment-form__buttons">
-                        <Button color='teal' variant="light" compact onClick={props.onClose}
+                        <Button type='submit' color='teal' variant="light" compact onClick={props.onClose}
                         >Create appointment</Button>
 
                     </div>

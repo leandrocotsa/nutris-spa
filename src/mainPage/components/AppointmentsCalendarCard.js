@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Card from '../../shared/components/UIElements/Card';
 
@@ -25,17 +25,26 @@ const colors = [
 
 const AppointmentsCalendarCard = props => {
 
-    const calendarAppointments = props.appointments.map(appointment => {
-        return {
-            id: appointment.id,
-            startAt: appointment.startDate,
-            endAt: appointment.endDate,
-            timezoneStartAt: 'Europe/Berlin', // optional
-            summary: 'AID: ' + appointment.id + ', ' + appointment.patientName,
-            color: colors[Math.floor(Math.random() * colors.length - 1) + 1],
-            calendarID: 'work'
-        }
-    });
+    const [calendarAppointments, setCalendarAppointments] = useState();
+
+
+
+    useEffect(() => {
+
+        setCalendarAppointments(props.appointments.map(appointment => {
+            return {
+                id: appointment.id,
+                startAt: appointment.startTime,
+                endAt: appointment.endTime,
+                timezoneStartAt: 'Europe/Berlin', // optional
+                summary: appointment.patientName,
+                color: colors[Math.floor(Math.random() * colors.length - 1) + 1],
+                calendarID: 'work'
+            }
+        }));
+
+    }, [props.appointments]);
+
 
 
 

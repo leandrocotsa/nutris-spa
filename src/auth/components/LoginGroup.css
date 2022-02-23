@@ -70,6 +70,14 @@
 .login-form__submit-button {
     text-align: center;
     margin: 30px;
+    
+}
+
+.login-form__error-message {
+    margin-top: 10px;
+    color: rgb(255, 86, 86);
+    font-size: 0.7em;
+    
 }
 
 .signup-form__names-row {

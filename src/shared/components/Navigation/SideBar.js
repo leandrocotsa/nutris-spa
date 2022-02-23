@@ -1,24 +1,32 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import SideBarLinks from './SideBarLinks';
 import './SideBar.css';
+import { AuthContext } from '../../context/auth-context';
 
 
 const SideBar = props => {
 
-    if(window.location.pathname==='/login' || window.location.pathname==='/signup'){
-        return null;
-    }   
+    const auth = useContext(AuthContext);
 
-    return <div className="side-bar">
-          <div className="side-bar__logo">
-            <img src='/nutris-logo.png' alt="logo" />
-          </div>
+ 
 
-        <div className="">
-            <SideBarLinks />
-        </div>
-    </div>;
+    return (
+
+        <React.Fragment>
+            {auth.isLoggedIn &&
+                <div className="side-bar">
+                    <div className="side-bar__logo">
+                        <img src='/nutris-logo.png' alt="logo" />
+                    </div>
+
+                    <div className="">
+                        <SideBarLinks />
+                    </div>
+                </div>}
+        </React.Fragment>
+    );
+
 };
 
 export default SideBar;
