@@ -20,7 +20,8 @@ import EditAppointmentModal from './EditAppointmentModal';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 
 const reformatDate = (dateStart, dateEnd) => {
-    return new Date(dateStart).toLocaleString().replace(/AM|PM/, '');
+    const dateString = new Date(dateStart).toLocaleString().replace(/AM|PM/, '')
+    return dateString.substring(0, dateString.length-4);
 };
 
 
@@ -72,18 +73,20 @@ const AppointmentsTable = props => {
 
 
 
-    const deleteAppointment = async (appointmentId) => {
+    const deleteAppointment = async () => {
 
         try {
             await sendRequest(
-                'http://localhost:8080/appointments/' + appointmentId,
+                'http://localhost:8080/appointments/' + selectedAppointment.id,
                 'DELETE',
                 null,
                 {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY0NTcxNTg0MCwiaWF0IjoxNjM3MDc1ODQwLCJqdGkiOiIxIn0.Hj9vs2H_BWjFnQax6x51dqtK4io3_oHpZc57R0OZuYaDCKEyidtZfSXS1SREupJTNl3nWZznA69Al6JaWJDK-w'
+                    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
                 }
             );
+
+            props.onDelete(selectedAppointment.id);
         } catch (err) {
 
         }
@@ -130,15 +133,18 @@ const AppointmentsTable = props => {
                     </div>
                 </td>}
 
-
-
-
-            {appointment.type === "FIRST"
+            {props.type && (appointment.type === "FIRST"
                 ? <td><Badge size="xs" variant="outline" color="red">{appointment.type}</Badge></td>
-                : <td><Badge size="xs" variant="outline" color="cyan">{appointment.type}</Badge></td>}
+                : <td><Badge size="xs" variant="outline" color="cyan">{appointment.type}</Badge></td>)}
+
+
+
             {appointment.state === "COMPLETED"
                 ? <td><Badge color="teal">{appointment.state}</Badge></td>
                 : <td><Badge color="orange">{appointment.state}</Badge></td>}
+
+
+
             <td>
                 <div className='all-appointments-card__action-icons'>
                     <Menu
@@ -154,7 +160,14 @@ const AppointmentsTable = props => {
                         }>
 
                         {appointment.state !== "COMPLETED"
-                            ? <Menu.Item component={Link} to={appointment.type === "FIRST" ? `/patients/new` : `/appointments/${appointment.id}/measurements`} icon={<BiCalendarStar />}>Start</Menu.Item>
+                            ? <Menu.Item 
+                            component={Link} 
+                            to={appointment.patientId === null
+                                ? "/patients/new"
+                                : `/appointments/${appointment.id}/measurements?patient=${appointment.patientId}`
+                            } 
+                            state={{ appointmentId: appointment.id}}
+                            icon={<BiCalendarStar />}>Start</Menu.Item>
                             : <Menu.Item disabled icon={<BiCalendarStar />}>Start</Menu.Item>
                         }
 
@@ -184,7 +197,8 @@ const AppointmentsTable = props => {
                     setOpenedWarning(false)
                 }}
                 onConfirm={deleteAppointment}
-                toDelete={selectedAppointment}
+                
+                message="Are you sure you want to delete this appointment? This operation cannot be undone."
             />
 
             <EditAppointmentModal
@@ -264,7 +278,7 @@ const AppointmentsTable = props => {
                         <tr>
                             <th>Date</th>
                             {props.patientName && <th>Patient</th>}
-                            <th>Type</th>
+                            {props.type && <th>Type</th>}
                             <th>State</th>
                             <th></th>
                         </tr>

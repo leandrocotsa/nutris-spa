@@ -7,6 +7,7 @@ import { DatePicker, TimeInput } from '@mantine/dates';
 
 import './EditAppointmentModal.css';
 import { useHttpClient } from '../../shared/hooks/http-hook';
+import { useNavigate } from 'react-router-dom';
 
 
 const EditAppointmentModal = props => {
@@ -14,6 +15,8 @@ const EditAppointmentModal = props => {
     const [loadedPatients, setLoadedPatients] = useState([]);
 
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+    const navigate = useNavigate();
 
     //verificar se é modal de update ou create appointment 
     
@@ -43,8 +46,40 @@ const EditAppointmentModal = props => {
 
     const updateAppointmentHandler = async (event) => {
         event.preventDefault();
-        console.log(props.appointment.patientName)
+        event.preventDefault();
 
+        const date = new Date(editAppForm.values.date).toISOString();
+        const cleanDate = date.substring(0, date.indexOf('T'));
+
+
+        const start = new Date(editAppForm.values.startTime).toISOString();
+        const startTime = start.substring(start.indexOf("T") + 1);
+        const end = new Date(editAppForm.values.endTime).toISOString();
+        const endTime = end.substring(end.indexOf("T") + 1);
+
+
+        const updatedAppointment = {
+            startTime: `${cleanDate}T${startTime}`,
+            endTime: `${cleanDate}T${endTime}`,
+            patientName: editAppForm.values.patientName
+        }
+
+
+        try {
+            await sendRequest(
+                'http://localhost:8080/appointments/' + props.appointment.id,
+                'PATCH',
+                JSON.stringify(updatedAppointment),
+                {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
+
+                }
+            );
+            navigate("/appointments");
+        } catch (err) {
+
+        }
 
 
 

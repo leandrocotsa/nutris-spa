@@ -1,224 +1,366 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+
+import { Button, Radio, RadioGroup, TextInput, Divider, Select, NumberInput, Loader } from '@mantine/core';
+
 
 import OngoingAppointmentForm from '../components/OngoingAppointmentForm';
 
+import './AppointmentMeasurements.css';
+import PatientCard from '../../patients/components/singlePatient/PatientCard';
+import MeasurementsCard from '../../patients/components/singlePatient/MeasurementsCard';
+import Card from '../../shared/components/UIElements/Card';
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import { useForm } from '@mantine/hooks';
 
-const AppointmentMeasurements = () => {
-  const patientData =
-  {
-    "id": 2,
-    "fullName": "Nikocado Avocado",
-    "birthDate": "1998-01-01",
-    "phoneNumber": "912345678",
-    "sex": "Male",
-    "profilePicture": null,
-    "familyNumber": 0,
-    "maritalStatus": "string",
-    "email": "niko@gmail.com",
-    "anamnesis": {
-      "healthProblems": "string",
-      "medication": "string",
-      "healthBackground": "string",
-      "reasonAppointment": "string",
-      "minimalWeight": 70.0,
-      "maximumWeight": 100.0,
-      "desiredWeight": 75.0,
-      "height": 170,
-      "activityQuotient": 0.0,
-      "allergies": "string",
-      "intestinalTransit": "string",
-      "urineColor": "string",
-      "waterConsumption": "string",
-      "coffee": "string",
-      "refrigerants": "string",
-      "weekendExceptions": "string",
-      "knowsCooking": true,
-      "wakeUpHour": "string",
-      "bedHour": "string",
-      "dailyMealsSummary": "string"
-    },
-    "macroNutrients": {
-      "idealWeight": 65.30000000000001,
-      "vet": 0.0,
-      "metBasalRefWeight": 3146.3862500000005,
-      "metBasalCurrentWeight": 7629.2300000000005,
-      "proteins": 190.73075000000003,
-      "fat": 127.15383333333335,
-      "hydrates": 476.82687500000003
-    },
-    "appointmentsList": [
-      {
-        "id": 1,
-        "date": "2020-11-04 12:00",
-        "patientName": "Ana",
-        "patientId": 2,
-        "nutritionistName": "Diana Costa",
-        "nutritionistId": 1,
-        "state": "COMPLETED",
-        "type": "FIRST",
-        "notes": "string"
-      },
-      {
-        "id": 1,
-        "date": "2020-11-04 12:00",
-        "patientName": "Ana",
-        "patientId": 2,
-        "nutritionistName": "Diana Costa",
-        "nutritionistId": 1,
-        "state": "SCHEDULED",
-        "type": "FIRST",
-        "notes": "string"
-      },       {
-        "id": 1,
-        "date": "2020-11-04 12:00",
-        "patientName": "Ana",
-        "patientId": 2,
-        "nutritionistName": "Diana Costa",
-        "nutritionistId": 1,
-        "state": "COMPLETED",
-        "type": "FIRST",
-        "notes": "string"
-      },       {
-        "id": 1,
-        "date": "2020-11-04 12:00",
-        "patientName": "Ana",
-        "patientId": 2,
-        "nutritionistName": "Diana Costa",
-        "nutritionistId": 1,
-        "state": "COMPLETED",
-        "type": "FIRST",
-        "notes": "string"
-      },      {
-        "id": 1,
-        "date": "2020-11-04 12:00",
-        "patientName": "Ana",
-        "patientId": 2,
-        "nutritionistName": "Diana Costa",
-        "nutritionistId": 1,
-        "state": "COMPLETED",
-        "type": "FIRST",
-        "notes": "string"
-      },      {
-        "id": 1,
-        "date": "2020-11-04 12:00",
-        "patientName": "Ana",
-        "patientId": 2,
-        "nutritionistName": "Diana Costa",
-        "nutritionistId": 1,
-        "state": "COMPLETED",
-        "type": "FIRST",
-        "notes": "string"
-      },      {
-        "id": 1,
-        "date": "2020-11-04 12:00",
-        "patientName": "Ana",
-        "patientId": 2,
-        "nutritionistName": "Diana Costa",
-        "nutritionistId": 1,
-        "state": "COMPLETED",
-        "type": "FIRST",
-        "notes": "string"
-      },      {
-        "id": 1,
-        "date": "2020-11-04 12:00",
-        "patientName": "Ana",
-        "patientId": 2,
-        "nutritionistName": "Diana Costa",
-        "nutritionistId": 1,
-        "state": "COMPLETED",
-        "type": "FIRST",
-        "notes": "string"
+
+const AppointmentMeasurements = (props) => {
+
+
+  //fetch do patient e por num state
+  const appointmentId = useParams().appointmentId;
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const patientId = searchParams.get("patient");
+
+
+  const [loadedPatient, setLoadedPatient] = useState();
+
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+
+
+    const fetchPatient = async () => { //not a good practice to turn useEffect into async so this is the way to go
+
+      try {
+        const responseData = await sendRequest(
+          'http://localhost:8080/patients/' + patientId,
+          'GET', null,
+          {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
+          }
+        );
+
+        console.log(responseData);
+        setLoadedPatient(responseData);
+
+
+
+      } catch (err) {
+
       }
-    ],
-    "measurementsList": [
-      {
-        "id": 1,
-        "date": "2021-11-04",
-        "weight": 100.0,
-        "imc": 6.0,
-        "fatMassPerc": 20.0,
-        "kgLeanMass": 20.0,
-        "waterPerc": 3.0,
-        "basalMetabolism": 5,
-        "visceralFat": 5,
-        "boneMass": 20.0,
-        "bodyAge": 28,
-        "waistPerimeter": 2.0,
-        "hipPerimeter": 10.0,
-        "chestPerimeter": 30.0,
-        "others": "string"
-      },{
-        "id": 2,
-        "date": "2022-11-04",
-        "weight": 92.0,
-        "imc": 6.0,
-        "fatMassPerc": 16.0,
-        "kgLeanMass": 20.0,
-        "waterPerc": 3.0,
-        "basalMetabolism": 5,
-        "visceralFat": 5,
-        "boneMass": 20.0,
-        "bodyAge": 28,
-        "waistPerimeter": 2.0,
-        "hipPerimeter": 10.0,
-        "chestPerimeter": 30.0,
-        "others": "string"
-      },{
-        "id": 3,
-        "date": "2023-11-04",
-        "weight": 88.0,
-        "imc": 6.0,
-        "fatMassPerc": 20.0,
-        "kgLeanMass": 17.0,
-        "waterPerc": 3.0,
-        "basalMetabolism": 5,
-        "visceralFat": 5,
-        "boneMass": 20.0,
-        "bodyAge": 28,
-        "waistPerimeter": 2.0,
-        "hipPerimeter": 10.0,
-        "chestPerimeter": 30.0,
-        "others": "string"
-      },
-      {
-        "id": 4,
-        "date": "2024-11-04",
-        "weight": 90.0,
-        "imc": 6.0,
-        "fatMassPerc": 20.0,
-        "kgLeanMass": 19.0,
-        "waterPerc": 3.0,
-        "basalMetabolism": 5,
-        "visceralFat": 5,
-        "boneMass": 20.0,
-        "bodyAge": 28,
-        "waistPerimeter": 2.0,
-        "hipPerimeter": 10.0,
-        "chestPerimeter": 30.0,
-        "others": "string"
-      },{
-        "id": 5,
-        "date": "2025-11-04",
-        "weight": 93.0,
-        "imc": 6.0,
-        "fatMassPerc": 20.0,
-        "kgLeanMass": 20.0,
-        "waterPerc": 3.0,
-        "basalMetabolism": 5,
-        "visceralFat": 5,
-        "boneMass": 20.0,
-        "bodyAge": 28,
-        "waistPerimeter": 2.0,
-        "hipPerimeter": 10.0,
-        "chestPerimeter": 30.0,
-        "others": "string"
-      }
-    ]
-  };
+    };
+    fetchPatient();
+
+
+
+    //first fetch with all appointments
+    //set dos appointments no current
+    //props que faz fazer fetch de tudo ou so dos de hoje?
+  }, [patientId, sendRequest]);
+
+
+
+  const form = useForm({
+    initialValues: {
+      basalMetabolism: '',
+      bodyAge: '',
+      boneMass: '',
+      chestPerimeter: '',
+      date: '',
+      fatMassPerc: '',
+      hipPerimeter: '',
+      imc: '',
+      kgLeanMass: '',
+      others: '',
+      visceralFat: '',
+      waistPerimeter: '',
+      waterPerc: '',
+      weight: ''
+
+    },
+    validationRules: {
+      name: (value) => value.trim().length >= 2,
+    },
+  });
+
+
+
+  const finishAppointmentHandler = async (event) => {
+    event.preventDefault();
+
+
+    const newMeasurements = {
+      basalMetabolism: form.values.basalMetabolism,
+      bodyAge: form.values.bodyAge,
+      boneMass: form.values.boneMass,
+      chestPerimeter: form.values.chestPerimeter,
+      date: new Date().toISOString(),
+      fatMassPerc: form.values.fatMassPerc,
+      hipPerimeter: form.values.hipPerimeter,
+      imc: form.values.imc,
+      kgLeanMass: form.values.kgLeanMass,
+      visceralFat: form.values.visceralFat,
+      waistPerimeter: form.values.waistPerimeter,
+      waterPerc: form.values.waterPerc,
+      weight: form.values.weight
+
+    }
+
+    console.log(newMeasurements);
+    //nao está a ir para o backend
+    try {
+      await sendRequest(
+        `http://localhost:8080/appointments/${appointmentId}/finish`,
+        'PATCH',
+        JSON.stringify(newMeasurements),
+        {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
+
+        }
+      );
+
+      navigate(`/patients/${patientId}`);
+    } catch (err) {
+    }
+
+  }
+
+
+
 
   return (
-      <OngoingAppointmentForm patient={patientData} />
-  )
+    <div className="main__wrapper">
+      <div className="ongoing-appointment-form__info">
+        <h1>New body measurements registration</h1>
+        <p>Register the new body measurements of the patient</p>
+      </div>
+
+
+
+
+      <div className="ongoing-appointment-form__container">
+
+        <div className="ongoing-appointment-form__left-column">
+
+          <Card className='ongoing-appointment-card'>
+            <form onSubmit={finishAppointmentHandler}>
+              <div className="ongoing-appointment-form__item">
+                <NumberInput
+                  placeholder="Patient's weight"
+                  label="Weight (in kg)"
+                  variant="filled"
+                  radius="md"
+                  size="xs"
+                  precision={2}
+                  step={0.05}
+                  {...form.getInputProps('weight')}
+                />
+              </div>
+
+              <div className="ongoing-appointment-form__item">
+                <NumberInput
+                  placeholder="Patient's IMC"
+                  label="IMC"
+                  variant="filled"
+                  radius="md"
+                  size="xs"
+                  precision={2}
+                  step={0.05}
+                  style={{ marginTop: 20 }}
+                  {...form.getInputProps('imc')}
+                />
+              </div>
+
+              <div className="ongoing-appointment-form__item">
+                <NumberInput
+                  placeholder="Patient's fat mass in %"
+                  label="Fat mass percentage"
+                  variant="filled"
+                  radius="md"
+                  size="xs"
+                  precision={2}
+                  step={0.05}
+                  style={{ marginTop: 20 }}
+                  {...form.getInputProps('fatMassPerc')}
+                />
+              </div>
+
+              <div className="ongoing-appointment-form__item">
+                <NumberInput
+                  placeholder="Patient's lean mass in kg"
+                  label="Lean mass"
+                  variant="filled"
+                  radius="md"
+                  size="xs"
+                  precision={2}
+                  step={0.05}
+                  style={{ marginTop: 20 }}
+                  {...form.getInputProps('kgLeanMass')}
+                />
+              </div>
+
+              <div className="ongoing-appointment-form__item">
+                <NumberInput
+                  placeholder="Patient's water percentage"
+                  label="Water percentage"
+                  variant="filled"
+                  radius="md"
+                  size="xs"
+                  precision={2}
+                  step={0.05}
+                  style={{ marginTop: 20 }}
+                  {...form.getInputProps('waterPerc')}
+                />
+              </div>
+
+              <div className="ongoing-appointment-form__item">
+                <NumberInput
+                  placeholder="Patient's Basal metabolism"
+                  label="Basal metabolism"
+                  variant="filled"
+                  radius="md"
+                  size="xs"
+                  precision={2}
+                  step={0.05}
+                  style={{ marginTop: 20 }}
+                  {...form.getInputProps('basalMetabolism')}
+                />
+              </div>
+
+              <div className="ongoing-appointment-form__item">
+                <NumberInput
+                  placeholder="Patient's visceral fat"
+                  label="Visceral fat"
+                  variant="filled"
+                  radius="md"
+                  size="xs"
+                  precision={2}
+                  step={0.05}
+                  style={{ marginTop: 20 }}
+                  {...form.getInputProps('visceralFat')}
+                />
+              </div>
+
+              <div className="ongoing-appointment-form__item">
+                <NumberInput
+                  placeholder="Patient's bone mass"
+                  label="Bone mass"
+                  variant="filled"
+                  radius="md"
+                  size="xs"
+                  precision={2}
+                  step={0.05}
+                  style={{ marginTop: 20 }}
+                  {...form.getInputProps('boneMass')}
+                />
+              </div>
+
+              <div className="ongoing-appointment-form__item">
+                <NumberInput
+                  placeholder="Patient's body age"
+                  label="Body age"
+                  variant="filled"
+                  radius="md"
+                  size="xs"
+                  style={{ marginTop: 20 }}
+                  {...form.getInputProps('bodyAge')}
+                />
+              </div>
+
+              <div className="ongoing-appointment-form__item">
+                <NumberInput
+                  placeholder="Patient's waist perimeter in cm"
+                  label="Waist perimeter"
+                  variant="filled"
+                  radius="md"
+                  size="xs"
+                  precision={2}
+                  step={0.05}
+                  style={{ marginTop: 20 }}
+                  {...form.getInputProps('waistPerimeter')}
+                />
+              </div>
+
+              <div className="ongoing-appointment-form__item">
+                <NumberInput
+                  placeholder="Patient's hip perimeter in cm"
+                  label="Hip perimeter"
+                  variant="filled"
+                  radius="md"
+                  size="xs"
+                  precision={2}
+                  step={0.05}
+                  style={{ marginTop: 20 }}
+                  {...form.getInputProps('hipPerimeter')}
+                />
+              </div>
+
+              <div className="ongoing-appointment-form__item">
+                <NumberInput
+                  placeholder="Patient's chest perimeter in cm"
+                  label="Chest perimeter"
+                  variant="filled"
+                  radius="md"
+                  size="xs"
+                  precision={2}
+                  step={0.05}
+                  style={{ marginTop: 20, marginBottom: 20 }}
+                  {...form.getInputProps('chestPerimeter')}
+                />
+              </div>
+
+
+
+              <div className='new-measurement-form__submit-button'>
+                <Button type='submit' color='teal' variant="outline" compact>Submit</Button>
+              </div>
+
+            </form >
+          </Card>
+
+        </div>
+
+        <div className="ongoing-appointment-form__right-column">
+
+          {!isLoading && loadedPatient ?
+            <React.Fragment>
+              <div className='ongoing-appointment-card'>
+                <PatientCard className="ongoing-appointment-card-patient" patient={loadedPatient} editable={false} />
+              </div>
+              <div className='ongoing-appointment-card'>
+                <MeasurementsCard measurements={loadedPatient.measurementsList} />
+              </div>
+            </React.Fragment>
+
+            :
+
+            <div className='empty-warning'><Loader color="teal" size="sm" variant="dots" /> </div>
+          }
+
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+      </div>
+
+
+    </div >
+
+  );
 };
 
 export default AppointmentMeasurements;

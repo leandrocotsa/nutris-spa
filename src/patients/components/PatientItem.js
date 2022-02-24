@@ -29,21 +29,10 @@ const UserItem = props => {
           <h4>{props.birthDate}</h4>
         </div>
 
-        <div className="patient-item__info">
-          <h4>{props.lastAppointment}</h4>
-        </div>
+
 
         <div className="patient-item__info">
-          <h4>
-            {props.weightDif >>> 0 === parseFloat(props.weightDif)
-              ? <span className='patient-item__info patient-item__info__weight-diff'> <i className="ai-triangle-up"></i> {props.weightDif}Kg</span>
-              : <span className='patient-item__info patient-item__info__weight-diff'> <i className="ai-triangle-down"></i>{props.weightDif}Kg</span>
-            }
-          </h4>
-        </div>
-
-        <div className="patient-item__info">
-          <h4>{props.currentWeight}Kg /
+          <h4>{ props.currentWeight ? props.currentWeight : "-" }Kg /
             <span className='patient-item__info__goal-weight'>{props.weightGoal}Kg</span>
           </h4>
         </div>

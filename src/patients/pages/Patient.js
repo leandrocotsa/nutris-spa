@@ -1,182 +1,85 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import GraphsCard from '../components/singlePatient/GraphsCard';
+import MeasurementsCard from '../components/singlePatient/MeasurementsCard';
+import PatientAppointmentsCard from '../components/singlePatient/PatientAppointmentsCard';
+import PatientCard from '../components/singlePatient/PatientCard';
 
 import PatientGroup from '../components/singlePatient/PatientGroup';
+
+import { Loader } from '@mantine/core';
 
 
 const Patient = () => {
 
   const patientId = useParams().patientId;
 
-  const patientData =
-  {
-    "id": 2,
-    "firstName": "Nikocado",
-    "lastName": "Avocado",
-    "birthDate": "01/01/1998",
-    "phoneNumber": "912345678",
-    "sex": "Male",
-    "profilePicture": null,
-    "familyNumber": 0,
-    "maritalStatus": "Married",
-    "email": "niko@gmail.com",
-    "anamnesis": {
-      "healthProblems": "None",
-      "medication": "Benuron",
-      "healthBackground": "Cancro",
-      "reasonAppointment": "Quer ficar grosso",
-      "minimalWeight": 70.0,
-      "maximumWeight": 100.0,
-      "desiredWeight": 75.0,
-      "height": 170,
-      "activityQuotient": 1.12,
-      "allergies": "None",
-      "intestinalTransit": "Normal",
-      "urineColor": "#f20c0c",
-      "waterConsumption": "1L per day",
-      "coffee": "Never",
-      "refrigerants": "Every day",
-      "weekendExceptions": "Always mac",
-      "knowsCooking": "yes",
-      "wakeUpHour": "10:00",
-      "bedHour": "22:00",
-      "dailyMealsSummary": "Come rissois quase todos os dias e é viciado em coca cola portanto bebe em todas as refeições."
-    },
-    "macroNutrients": {
-      "idealWeight": 65.30000000000001,
-      "vet": 0.0,
-      "metBasalRefWeight": 3146.3862500000005,
-      "metBasalCurrentWeight": 7629.2300000000005,
-      "proteins": 190.73075000000003,
-      "fat": 127.15383333333335,
-      "hydrates": 476.82687500000003
-    },
-    "appointmentsList": [
-      {
-        "id": 1,
-        "startDate": "2021-11-05T12:00:00.000Z",
-        "endDate": "2021-11-05T13:00:00.000Z",
-        "patientName": "Ana",
-        "patientId": 2,
-        "nutritionistName": "Diana Costa",
-        "nutritionistId": 1,
-        "state": "COMPLETED",
-        "type": "FIRST",
-        "notes": "string"
-      },
-      {
-        "id": 2,
-        "startDate": "2021-11-06T13:00:00.000Z",
-        "endDate": "2021-11-06T14:00:00.000Z",
-        "patientName": "Ana",
-        "patientId": 2,
-        "nutritionistName": "Diana Costa",
-        "nutritionistId": 1,
-        "state": "SCHEDULED",
-        "type": "FIRST",
-        "notes": "string"
-      },       {
-        "id": 3,
-        "startDate": "2022-01-27T10:00:00.000Z",
-        "endDate": "2022-01-27T12:00:00.000Z",
-        "patientName": "Ana",
-        "patientId": 2,
-        "nutritionistName": "Diana Costa",
-        "nutritionistId": 1,
-        "state": "COMPLETED",
-        "type": "FIRST",
-        "notes": "string"
+  const [loadedPatient, setLoadedPatient] = useState();
+
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+
+
+
+
+
+
+  useEffect(() => {
+    const fetchAppointments = async () => { //not a good practice to turn useEffect into async so this is the way to go
+
+      try {
+        const responseData = await sendRequest(
+          'http://localhost:8080/patients/' + patientId,
+          'GET', null,
+          {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
+          }
+        );
+        setLoadedPatient(responseData);
+      } catch (err) {
+
       }
-    ],
-    "measurementsList": [
-      {
-        "id": 1,
-        "date": "2021-11-04",
-        "weight": 100.0,
-        "imc": 6.0,
-        "fatMassPerc": 20.0,
-        "kgLeanMass": 20.0,
-        "waterPerc": 3.0,
-        "basalMetabolism": 5,
-        "visceralFat": 5,
-        "boneMass": 20.0,
-        "bodyAge": 28,
-        "waistPerimeter": 2.0,
-        "hipPerimeter": 10.0,
-        "chestPerimeter": 30.0,
-        "others": "string"
-      },{
-        "id": 2,
-        "date": "2022-11-04",
-        "weight": 92.0,
-        "imc": 6.0,
-        "fatMassPerc": 16.0,
-        "kgLeanMass": 20.0,
-        "waterPerc": 3.0,
-        "basalMetabolism": 5,
-        "visceralFat": 5,
-        "boneMass": 20.0,
-        "bodyAge": 28,
-        "waistPerimeter": 2.0,
-        "hipPerimeter": 10.0,
-        "chestPerimeter": 30.0,
-        "others": "string"
-      },{
-        "id": 3,
-        "date": "2023-11-04",
-        "weight": 88.0,
-        "imc": 6.0,
-        "fatMassPerc": 20.0,
-        "kgLeanMass": 17.0,
-        "waterPerc": 3.0,
-        "basalMetabolism": 5,
-        "visceralFat": 5,
-        "boneMass": 20.0,
-        "bodyAge": 28,
-        "waistPerimeter": 2.0,
-        "hipPerimeter": 10.0,
-        "chestPerimeter": 30.0,
-        "others": "string"
-      },
-      {
-        "id": 4,
-        "date": "2024-11-04",
-        "weight": 90.0,
-        "imc": 6.0,
-        "fatMassPerc": 20.0,
-        "kgLeanMass": 19.0,
-        "waterPerc": 3.0,
-        "basalMetabolism": 5,
-        "visceralFat": 5,
-        "boneMass": 20.0,
-        "bodyAge": 28,
-        "waistPerimeter": 2.0,
-        "hipPerimeter": 10.0,
-        "chestPerimeter": 30.0,
-        "others": "string"
-      },{
-        "id": 5,
-        "date": "2025-11-04",
-        "weight": 93.0,
-        "imc": 6.0,
-        "fatMassPerc": 20.0,
-        "kgLeanMass": 20.0,
-        "waterPerc": 3.0,
-        "basalMetabolism": 5,
-        "visceralFat": 5,
-        "boneMass": 20.0,
-        "bodyAge": 28,
-        "waistPerimeter": 2.0,
-        "hipPerimeter": 10.0,
-        "chestPerimeter": 30.0,
-        "others": "string"
-      }
-    ]
-  };
+    };
+    fetchAppointments();
+
+    //first fetch with all appointments
+    //set dos appointments no current
+    //props que faz fazer fetch de tudo ou so dos de hoje?
+  }, [sendRequest]);
+
+  
+
+
 
   return (
-      <PatientGroup patient={patientData} />
-  )
+    <div className="main__wrapper">
+      <div className="patient-group__info">
+        <h1>Patient information</h1>
+        <p>Check all details about your patient</p>
+      </div>
+
+      {!isLoading && loadedPatient ?
+        <React.Fragment>
+          <div className="patient-group__container">
+            <PatientAppointmentsCard appointments={loadedPatient.appointmentsList} />
+            <MeasurementsCard measurements={loadedPatient.measurementsList} />
+            <PatientCard patient={loadedPatient} editable={true} />
+          </div>
+          <GraphsCard measurements={loadedPatient.measurementsList} />
+
+        </React.Fragment>
+        :
+        <div className='empty-warning'>
+          <Loader color="teal" size="sm" variant="dots" />
+        </div>
+      }
+
+
+    </div>
+
+  );
 };
 
 export default Patient;

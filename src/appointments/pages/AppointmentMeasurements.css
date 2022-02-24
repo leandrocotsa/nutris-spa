@@ -1,0 +1,38 @@
+.ongoing-appointment-form__container {
+    margin-top: 20px;
+    display: grid;
+    gap: 1.5em;
+    grid-template-columns: 1.8fr 1fr;
+
+}
+
+.ongoing-appointment-card {
+    margin-bottom: 30px;
+}
+
+
+.ongoing-appointment-form__right-column {
+    max-width: 400px;
+    min-width: 400px;
+    margin-right: auto;
+    margin-left: auto;
+    
+}
+
+.ongoing-appointment-card-patient {
+    height: 280px;
+}
+
+.new-measurement-form__submit-button {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+
+
+
+@media (max-width: 1000px) {
+    .ongoing-appointment-form__container {
+        grid-template-columns: 1fr;
+    }
+}

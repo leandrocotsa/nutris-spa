@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import Card from '../../shared/components/UIElements/Card';
 
+import { Loader } from '@mantine/core';
+
 import { AppointmentsTable } from '../../appointments/components/AppointmentsTable';
 
 import relax from '../../assets/relax-on-beach.svg';
@@ -14,7 +16,7 @@ import './TodaysAppointmentsCard.css';
 
 const TodaysAppointmentsCard = props => {
 
-    const [todaysAppointments, setTodaysAppointments] = useState({});
+    const [todaysAppointments, setTodaysAppointments] = useState();
 
 
 
@@ -23,11 +25,13 @@ const TodaysAppointmentsCard = props => {
         setTodaysAppointments(props.appointments.filter(appointment => {
             let appDate = new Date(appointment.startTime);
             let todaysDate = new Date();
-            return appointment.state !== "COMPLETED" && appDate.getDay() === todaysDate.getDay() && appDate.getMonth() === todaysDate.getMonth() && appDate.getFullYear() === todaysDate.getFullYear();
+            return (appointment.state !== "COMPLETED" && appDate.getDate() === todaysDate.getDate() && appDate.getMonth() === todaysDate.getMonth() && appDate.getFullYear() === todaysDate.getFullYear());
 
         }));
 
     }, [props.appointments]);
+
+       
 
 
 
@@ -45,14 +49,12 @@ const TodaysAppointmentsCard = props => {
 
             <div className='todays-appointments-card__container'>
 
-
-                <AppointmentsTable appointments={props.appointments} patientName={true} endDate={false} />
-
-                {props.appointments.length === 0 &&
-                    <div className='lol'><img  height={210} src={relax} alt='relax' /></div>
-                }
-
-
+                {todaysAppointments ?
+                    <React.Fragment>
+                        <AppointmentsTable appointments={todaysAppointments} patientName={true} endDate={false} onDelete={props.onDelete} />
+                        {todaysAppointments.length === 0 && <div className='lol'><img height={210} src={relax} alt='relax' /></div>}
+                    </React.Fragment>
+                    : <div className='empty-warning'><Loader color="teal" size="sm" variant="dots" /> </div>}
 
             </div>
 

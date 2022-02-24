@@ -16,10 +16,40 @@ import PatientFullDetailsModal from './PatientFullDetailsModal'
 
 
 import './PatientCard.css';
+import WarningModal from '../../../shared/components/FormElements/WarningModal';
+import { useHttpClient } from '../../../shared/hooks/http-hook';
+import { useNavigate } from 'react-router-dom';
 
 const PatientCard = props => {
 
     const [opened, setOpened] = useState(false);
+
+    const [openedWarning, setOpenedWarning] = useState(false);
+
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+    const navigate = useNavigate();
+
+
+    const deletePatient = async () => {
+
+        try {
+            await sendRequest(
+                'http://localhost:8080/patients/' + props.patient.id,
+                'DELETE',
+                null,
+                {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
+                }
+            );
+
+            navigate(`/patients`);
+
+        } catch (err) {
+
+        }
+    }
 
 
 
@@ -33,7 +63,16 @@ const PatientCard = props => {
 
     return (
 
-        <>
+        <React.Fragment>
+
+            <WarningModal
+                opened={openedWarning}
+                onClose={() => {
+                    setOpenedWarning(false)
+                }}
+                onConfirm={deletePatient}
+                message="Are you sure you want to delete this patient? This operation cannot be undone."
+            />
 
 
             <Card className={`patient-card ${props.className}`}>
@@ -111,7 +150,7 @@ const PatientCard = props => {
                                 control={
                                     <Button compact color='teal' variant="filled" size="xs" radius="md">...</Button>
                                 }>
-                                <Menu.Item color="red" icon={<BsFillTrashFill />}>Delete patient</Menu.Item>
+                                <Menu.Item color="red" icon={<BsFillTrashFill />} onClick={() => setOpenedWarning(true)}>Delete patient</Menu.Item>
                             </Menu>
 
 
@@ -126,7 +165,7 @@ const PatientCard = props => {
 
 
             </Card>
-        </>
+        </React.Fragment>
     );
 };
 

@@ -7,11 +7,22 @@ import { useForm } from '@mantine/hooks';
 
 
 import './PatientFullDetailsModal.css';
+import { useNavigate } from 'react-router-dom';
+import { useHttpClient } from '../../../shared/hooks/http-hook';
+import { useForceUpdate } from '../../../shared/hooks/force-update-hook';
+
+
 
 
 const PatientFullDetailsModal = props => {
 
     const [editView, setEditView] = useState(false);
+
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+    const navigate = useNavigate();
+
+
 
     const fullOnClose = () => {
         props.onClose();
@@ -61,6 +72,69 @@ const PatientFullDetailsModal = props => {
     });
 
 
+
+    const updatePatientHandler = async (event) => {
+
+
+        event.preventDefault();
+
+        const updatedPatient = {
+            anamnesis: {
+                activityQuotient: editPatientForm.values.activityQuotient,
+                allergies: editPatientForm.values.allergies,
+                bedHour: editPatientForm.values.bedHour,
+                coffee: editPatientForm.values.coffee,
+                dailyMealsSummary: editPatientForm.values.dailyMealsSummary,
+                desiredWeight: editPatientForm.values.desiredWeight,
+                healthBackground: editPatientForm.values.healthBackground,
+                healthProblems: editPatientForm.values.healthProblems,
+                height: editPatientForm.values.height,
+                intestinalTransit: editPatientForm.values.intestinalTransit,
+                knowsCooking: editPatientForm.values.knowsCooking,
+                maximumWeight: editPatientForm.values.maximumWeight,
+                medication: editPatientForm.values.medication,
+                minimalWeight: editPatientForm.values.minimalWeight,
+                reasonAppointment: editPatientForm.values.reasonAppointment,
+                refrigerants: editPatientForm.values.refrigerants,
+                urineColor: editPatientForm.values.urineColor,
+                wakeUpHour: editPatientForm.values.wakeUpHour,
+                waterConsumption: editPatientForm.values.waterConsumption,
+                weekendExceptions: editPatientForm.values.weekendExceptions
+            },
+            birthDate: new Date(editPatientForm.values.birthDate).toISOString(),
+            email: editPatientForm.values.email,
+            familyNumber: editPatientForm.values.familyNumber,
+            firstName: editPatientForm.values.firstName,
+            lastName: editPatientForm.values.lastName,
+            maritalStatus: editPatientForm.values.maritalStatus,
+            phoneNumber: editPatientForm.values.phoneNumber,
+            sex: editPatientForm.values.sex
+        }
+
+        console.log(updatedPatient);
+        //nao está a ir para o backend
+        try {
+            const responseData = await sendRequest(
+                `http://localhost:8080/patients/${props.patient.id}`,
+                'PATCH',
+                JSON.stringify(updatedPatient),
+                {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
+
+                }
+            );
+            fullOnClose();
+            navigate(`/patients`);
+        } catch (err) {
+
+        }
+
+
+
+    }
+
+
     return (
 
         <Modal
@@ -77,7 +151,7 @@ const PatientFullDetailsModal = props => {
 
                 {editView
                     ? <>
-                        <form onSubmit={editPatientForm.onSubmit((values) => console.log(values))}>
+                        <form onSubmit={updatePatientHandler}>
                             <div className='patient-card__anamnesis-modal-edit'>
 
                                 <div className="anamnesis__info">
@@ -410,30 +484,30 @@ const PatientFullDetailsModal = props => {
 
 
                                 <div className="anamnesis__info">
-                                    <TimeInput
+                                    <TextInput
+                                        placeholder="Patient's wake-up hour"
                                         label="Wake-up time"
                                         variant="filled"
-                                        defaultValue={new Date("1111-11-11T" + editPatientForm.values.wakeUpHour)}
                                         radius="md"
                                         size="xs"
                                         style={{ marginTop: 15 }}
-
-                                    >
-                                    </TimeInput>
+                                        {...editPatientForm.getInputProps('wakeUpHour')}
+                                    />
                                 </div>
 
                                 <div className="anamnesis__info">
-                                    <TimeInput
+                                    <TextInput
+                                        placeholder="Patient's bed time"
                                         label="Bed time"
                                         variant="filled"
-                                        defaultValue={new Date("1111-11-11T" + editPatientForm.values.bedHour)}
                                         radius="md"
                                         size="xs"
                                         style={{ marginTop: 15 }}
-
-                                    >
-                                    </TimeInput>
+                                        {...editPatientForm.getInputProps('bedHour')}
+                                    />
                                 </div>
+
+
 
 
 
@@ -475,7 +549,7 @@ const PatientFullDetailsModal = props => {
                             <Divider my="xs" label="Basic information" />
 
                             <div className="anamnesis__info">
-                                <h4>Full name: <span className='measurement-value'>{props.patient.fullName}</span></h4>
+                                <h4>Full name: <span className='measurement-value'>{`${props.patient.firstName} ${props.patient.lastName}`}</span></h4>
                             </div>
 
                             <div className="anamnesis__info">

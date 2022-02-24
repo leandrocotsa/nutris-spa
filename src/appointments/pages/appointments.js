@@ -1,120 +1,74 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import AllAppointmentsCard from '../components/AllAppointmentsCard';
 
-import AppointmentsGroup from '../components/AppointmentsGroup';
+
+
+
+import './Appointments.css';
 
 const Appointments = () => {
 
 
 
-  const APPS = [
-    {
-      "id": 1,
-      "startDate": "2021-11-05T12:00:00.000Z",
-      "endDate": "2021-11-05T13:00:00.000Z",
-      "patientName": "Ana",
-      "patientId": 2,
-      "nutritionistName": "Diana Costa",
-      "nutritionistId": 1,
-      "state": "COMPLETED",
-      "type": "FIRST",
-      "notes": "string"
-    },
-    {
-      "id": 2,
-      "startDate": "2021-11-06T13:00:00.000Z",
-      "endDate": "2021-11-06T14:00:00.000Z",
-      "patientName": "Ana",
-      "patientId": 2,
-      "nutritionistName": "Diana Costa",
-      "nutritionistId": 1,
-      "state": "SCHEDULED",
-      "type": "FIRST",
-      "notes": "string"
-    },       {
-      "id": 3,
-      "startDate": "2022-01-27T10:00:00.000Z",
-      "endDate": "2022-01-27T12:00:00.000Z",
-      "patientName": "Ana",
-      "patientId": 2,
-      "nutritionistName": "Diana Costa",
-      "nutritionistId": 1,
-      "state": "COMPLETED",
-      "type": "FIRST",
-      "notes": "string"
+  const [loadedAppointments, setLoadedAppointments] = useState();
 
-    },
-    {
-      "id": 4,
-      "startDate": "2021-11-06T13:00:00.000Z",
-      "endDate": "2021-11-06T14:00:00.000Z",
-      "patientName": "Ana",
-      "patientId": 2,
-      "nutritionistName": "Diana Costa",
-      "nutritionistId": 1,
-      "state": "SCHEDULED",
-      "type": "FIRST",
-      "notes": "string"
-    },       {
-      "id": 5,
-      "startDate": "2022-01-26T10:00:00.000Z",
-      "endDate": "2022-01-27T12:00:00.000Z",
-      "patientName": "Ana",
-      "patientId": 2,
-      "nutritionistName": "Diana Costa",
-      "nutritionistId": 1,
-      "state": "COMPLETED",
-      "type": "FIRST",
-      "notes": "string"
-    },
-    {
-      "id": 6,
-      "startDate": "2021-11-06T13:00:00.000Z",
-      "endDate": "2021-11-06T14:00:00.000Z",
-      "patientName": "Ana",
-      "patientId": 2,
-      "nutritionistName": "Diana Costa",
-      "nutritionistId": 1,
-      "state": "SCHEDULED",
-      "type": "FIRST",
-      "notes": "string"
-    },       {
-      "id": 7,
-      "startDate": "2022-01-25T10:00:00.000Z",
-      "endDate": "2022-01-27T12:00:00.000Z",
-      "patientName": "Ana",
-      "patientId": 2,
-      "nutritionistName": "Diana Costa",
-      "nutritionistId": 1,
-      "state": "COMPLETED",
-      "type": "FIRST",
-      "notes": "string"
-    },
-    {
-      "id": 8,
-      "startDate": "2021-11-06T13:00:00.000Z",
-      "endDate": "2021-11-06T14:00:00.000Z",
-      "patientName": "Ana",
-      "patientId": 2,
-      "nutritionistName": "Diana Costa",
-      "nutritionistId": 1,
-      "state": "SCHEDULED",
-      "type": "FOLLOWING",
-      "notes": "string"
-    },       {
-      "id": 9,
-      "startDate": "2022-01-27T10:00:00.000Z",
-      "endDate": "2022-01-27T12:00:00.000Z",
-      "patientName": "Ana",
-      "patientId": 2,
-      "nutritionistName": "Diana Costa",
-      "nutritionistId": 1,
-      "state": "COMPLETED",
-      "type": "FIRST",
-      "notes": "string"
-    }
-  ];
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
-  return <AppointmentsGroup appointments={APPS} />;
+
+
+  useEffect(() => {
+    const fetchAppointments = async () => { //not a good practice to turn useEffect into async so this is the way to go
+
+      try {
+        const responseData = await sendRequest(
+          'http://localhost:8080/appointments',
+          'GET', null,
+          {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
+          }
+        );
+        setLoadedAppointments(responseData);
+      } catch (err) {
+
+      }
+    };
+    fetchAppointments();
+
+    //first fetch with all appointments
+    //set dos appointments no current
+    //props que faz fazer fetch de tudo ou so dos de hoje?
+  }, [sendRequest]);
+
+
+  const appointmentDeletedHandler = (appointmentId) => {
+    setLoadedAppointments(prevAppointments => {
+      prevAppointments.filter(appointment => appointment.id !== appointmentId);
+    })
+  }
+
+
+
+
+  return (
+
+    <div className="main__wrapper">
+      <div className="appointment-group__info">
+        <h1>Appointments</h1>
+        <p>Check information about your appointments</p>
+      </div>
+      <div className="appointment-group__container">
+        <div className='appointment-group__container-left'>
+
+            <AllAppointmentsCard appointments={loadedAppointments} isLoading={isLoading} onDelete={appointmentDeletedHandler} />
+      
+
+        </div>
+      </div>
+    </div>
+
+  );
 };
 
 export default Appointments;

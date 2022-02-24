@@ -31,13 +31,14 @@ export const useHttpClient = () => {
         }
 
         setIsLoading(false);
-        
+
         return responseData;
 
 
       } catch (err) {
         setError(err.message);
         setIsLoading(false);
+        console.log(err);
         throw err;
       }
     },
@@ -48,7 +49,7 @@ export const useHttpClient = () => {
     setError(null);
   };
 
-     //solves the problem of when page is changed before http request has completed, which needs to abort
+  //solves the problem of when page is changed before http request has completed, which needs to abort
   useEffect(() => {
     return () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps

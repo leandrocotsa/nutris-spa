@@ -12,13 +12,7 @@ const PatientAppointmentsCard = props => {
 
 
 
-    if (props.appointments.length === 0) {
-        return (
-            <div className="center">
-                <h2>No patients found.</h2>
-            </div>
-        );
-    }
+
 
     return (
 
@@ -28,7 +22,7 @@ const PatientAppointmentsCard = props => {
 
             <div className='appointments-card__container'>
 
-                <AppointmentsTable appointments={props.appointments} patientName={false} endDate={false}/>
+                <AppointmentsTable appointments={props.appointments} patientName={false} endDate={false} type={false}/>
 
 
             </div>

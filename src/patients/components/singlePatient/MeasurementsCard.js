@@ -13,19 +13,15 @@ const MeasurementsCard = props => {
     const [currentMeasurement, setCurrentMeasurement] = useState(props.measurements[currentPos]);
 
     useEffect(() => {
-        currentPos = 0;
-        setCurrentMeasurement(props.measurements[currentPos]);
+        if (props.measurements.length !== 0) {
+            currentPos = 0;
+            setCurrentMeasurement(props.measurements[currentPos]);
+        }
     }, [props])
 
 
 
-    if (props.measurements.length === 0) {
-        return (
-            <div className="center">
-                <h2>No patients found.</h2>
-            </div>
-        );
-    }
+
 
     const pressPreviousHandler = () => {
         currentPos--;
@@ -47,66 +43,73 @@ const MeasurementsCard = props => {
 
 
                 <h2>Body Measurements</h2>
+                {props.measurements.length !== 0 && <h4><a href='lol'>Edit</a></h4>}
 
-                <h4><a href='lol'>Edit</a></h4>
-
-            </div>
-
-            <div className='measurements-card__container'>
-                <div className="measurements-card__info">
-                    <h4><span className='measurement-value'>Weight: </span>{currentMeasurement.weight}kg</h4>
-                </div>
-
-                <div className="measurements-card__info">
-                    <h4><span className='measurement-value'>IMC: </span>{currentMeasurement.imc}</h4>
-                </div>
-
-                <div className="measurements-card__info">
-                    <h4><span className='measurement-value'>Fat mass: </span>{currentMeasurement.fatMassPerc}%</h4>
-                </div>
-
-                <div className="measurements-card__info">
-                    <h4><span className='measurement-value'>Lean mass: </span>{currentMeasurement.kgLeanMass}kg</h4>
-                </div>
-                <div className="measurements-card__info">
-                    <h4><span className='measurement-value'>Water: </span>{currentMeasurement.waterPerc}%</h4>
-                </div>
-
-                <div className="measurements-card__info">
-                    <h4><span className='measurement-value'>Basal Met.: </span>{currentMeasurement.basalMetabolism}</h4>
-                </div>
-
-                <div className="measurements-card__info">
-                    <h4><span className='measurement-value'>Visceral fat: </span>{currentMeasurement.visceralFat}</h4>
-                </div>
-
-                <div className="measurements-card__info">
-                    <h4><span className='measurement-value'>Bone mass: </span>{currentMeasurement.boneMass}kg</h4>
-                </div>
-                <div className="measurements-card__info">
-                    <h4><span className='measurement-value'>Body age: </span>{currentMeasurement.bodyAge}</h4>
-                </div>
-                <div className="measurements-card__info">
-                    <h4><span className='measurement-value'>Waist per.: </span>{currentMeasurement.waistPerimeter}cm</h4>
-                </div>
-                <div className="measurements-card__info">
-                    <h4><span className='measurement-value'>Hip per.: </span>{currentMeasurement.hipPerimeter}cm</h4>
-                </div>
-                <div className="measurements-card__info">
-                    <h4><span className='measurement-value'>Chest per.: </span>{currentMeasurement.chestPerimeter}cm</h4>
-                </div>
 
             </div>
 
-            <div className='measurements-card__swapper'>
+            {props.measurements.length === 0 ? <p className='center'>No body measurements registered.</p> :
 
-                {currentPos > 0 && <FaAngleLeft size={16} onClick={pressPreviousHandler} />}
+                <React.Fragment>
+                    <div className='measurements-card__container'>
+                        <div className="measurements-card__info">
+                            <h4><span className='measurement-value'>Weight: </span>{currentMeasurement.weight}kg</h4>
+                        </div>
 
-                <span> {currentMeasurement.date} </span>
+                        <div className="measurements-card__info">
+                            <h4><span className='measurement-value'>IMC: </span>{currentMeasurement.imc}</h4>
+                        </div>
 
-                {currentPos < props.measurements.length - 1 && <FaAngleRight size={16} onClick={pressAfterHandler} />}
+                        <div className="measurements-card__info">
+                            <h4><span className='measurement-value'>Fat mass: </span>{currentMeasurement.fatMassPerc}%</h4>
+                        </div>
 
-            </div>
+                        <div className="measurements-card__info">
+                            <h4><span className='measurement-value'>Lean mass: </span>{currentMeasurement.kgLeanMass}kg</h4>
+                        </div>
+                        <div className="measurements-card__info">
+                            <h4><span className='measurement-value'>Water: </span>{currentMeasurement.waterPerc}%</h4>
+                        </div>
+
+                        <div className="measurements-card__info">
+                            <h4><span className='measurement-value'>Basal Met.: </span>{currentMeasurement.basalMetabolism}</h4>
+                        </div>
+
+                        <div className="measurements-card__info">
+                            <h4><span className='measurement-value'>Visceral fat: </span>{currentMeasurement.visceralFat}</h4>
+                        </div>
+
+                        <div className="measurements-card__info">
+                            <h4><span className='measurement-value'>Bone mass: </span>{currentMeasurement.boneMass}kg</h4>
+                        </div>
+                        <div className="measurements-card__info">
+                            <h4><span className='measurement-value'>Body age: </span>{currentMeasurement.bodyAge}</h4>
+                        </div>
+                        <div className="measurements-card__info">
+                            <h4><span className='measurement-value'>Waist per.: </span>{currentMeasurement.waistPerimeter}cm</h4>
+                        </div>
+                        <div className="measurements-card__info">
+                            <h4><span className='measurement-value'>Hip per.: </span>{currentMeasurement.hipPerimeter}cm</h4>
+                        </div>
+                        <div className="measurements-card__info">
+                            <h4><span className='measurement-value'>Chest per.: </span>{currentMeasurement.chestPerimeter}cm</h4>
+                        </div>
+
+                    </div>
+
+                    <div className='measurements-card__swapper'>
+
+                        {currentPos > 0 && <FaAngleLeft size={16} onClick={pressPreviousHandler} />}
+
+                        <span> {currentMeasurement.date} </span>
+
+                        {currentPos < props.measurements.length - 1 && <FaAngleRight size={16} onClick={pressAfterHandler} />}
+
+                    </div>
+                </React.Fragment>
+            }
+
+
 
         </Card>
     );

@@ -15,12 +15,19 @@ import MeasurementsCard from '../../patients/components/singlePatient/Measuremen
 
 
 
-
-
-
 import './OngoingAppointmentForm.css';
+import { useParams } from 'react-router-dom';
 
 const OngoingAppointmentForm = props => {
+
+    //fetch do patient
+
+
+
+
+    const appointmentId = useParams().appointmentId;
+
+    console.log(appointmentId);
 
     return (
         <div className="main__wrapper">

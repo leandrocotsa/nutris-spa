@@ -20,7 +20,7 @@ const NewAppointmentModal = props => {
     const navigate = useNavigate();
 
     //verificar se é modal de update ou create appointment 
-    
+
     const form = useForm({
         initialValues: {
             date: '',
@@ -48,7 +48,7 @@ const NewAppointmentModal = props => {
                         'GET', null,
                         {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY0NTcxNTg0MCwiaWF0IjoxNjM3MDc1ODQwLCJqdGkiOiIxIn0.Hj9vs2H_BWjFnQax6x51dqtK4io3_oHpZc57R0OZuYaDCKEyidtZfSXS1SREupJTNl3nWZznA69Al6JaWJDK-w'
+                            'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
                         }
                     );
 
@@ -59,7 +59,7 @@ const NewAppointmentModal = props => {
                         }
                     }));
 
-                    
+
                 } catch (err) {
 
                 }
@@ -83,9 +83,9 @@ const NewAppointmentModal = props => {
 
 
         const start = new Date(form.values.startTime).toISOString();
-        const startTime =start.substring(start.indexOf("T") + 1);
+        const startTime = start.substring(start.indexOf("T") + 1);
         const end = new Date(form.values.endTime).toISOString();
-        const endTime =end.substring(end.indexOf("T") + 1);
+        const endTime = end.substring(end.indexOf("T") + 1);
 
 
         const newAppointment = {
@@ -104,11 +104,10 @@ const NewAppointmentModal = props => {
                 JSON.stringify(newAppointment),
                 {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY0NTcxNTg0MCwiaWF0IjoxNjM3MDc1ODQwLCJqdGkiOiIxIn0.Hj9vs2H_BWjFnQax6x51dqtK4io3_oHpZc57R0OZuYaDCKEyidtZfSXS1SREupJTNl3nWZznA69Al6JaWJDK-w'
+                    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
 
                 }
             );
-            console.log(newAppointment);
             navigate("/");
         } catch (err) {
 

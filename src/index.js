@@ -4,11 +4,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import { NotificationsProvider } from '@mantine/notifications';
+
 
 ReactDOM.render(
 
   <React.StrictMode>
-    <App />
+    <NotificationsProvider>
+      <App />
+    </NotificationsProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -10,7 +10,7 @@ import './WarningModal.css';
 const WarningModal = props => {
 
     const confirmHandler  = async () => {
-        await props.onConfirm(props.toDelete.id);
+        await props.onConfirm();
         props.onClose();
     }
 
@@ -28,7 +28,7 @@ const WarningModal = props => {
             title={<h3>Warning</h3>}
         >
             <div className='warning-modal-wrapper'>
-                <h4>Are you sure you want to delete?</h4>
+                <h4>{props.message}</h4>
                 <div className="warning-modal__buttons">
                     <Button color='teal' variant="light" compact onClick={props.onClose}>
                         Cancel
