@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from '@mantine/hooks';
 
 import { Button, Modal, Radio, RadioGroup, Select, TextInput } from '@mantine/core';
 import { DatePicker, TimeInput } from '@mantine/dates';
 
+import { BsCheckCircleFill } from 'react-icons/bs';
 
 import './EditAppointmentModal.css';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { useNavigate } from 'react-router-dom';
+import { useNotifications } from '@mantine/notifications';
+import { AuthContext } from '../../shared/context/auth-context';
 
 
 const EditAppointmentModal = props => {
@@ -18,8 +21,13 @@ const EditAppointmentModal = props => {
 
     const navigate = useNavigate();
 
+    const notifications = useNotifications();
+
+
+    const auth = useContext(AuthContext);
+
     //verificar se é modal de update ou create appointment 
-    
+
     const editAppForm = useForm({
         initialValues: {
             patientName: '',
@@ -72,11 +80,19 @@ const EditAppointmentModal = props => {
                 JSON.stringify(updatedAppointment),
                 {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
+                    'Authorization': 'Bearer ' + auth.token
 
                 }
             );
             navigate("/appointments");
+
+            notifications.showNotification({
+                title: 'Appointment updated!',
+                message: 'You can check all your appointments in the Appointment page.',
+                radius: 'lg',
+                icon: (<BsCheckCircleFill />),
+                color: "teal"
+            })
         } catch (err) {
 
         }

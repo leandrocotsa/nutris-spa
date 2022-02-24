@@ -24,7 +24,7 @@ const NextAppointmentCard = props => {
         setNextAppointment(props.appointments.filter(appointment => {
             let appDate = new Date(appointment.startTime);
             let todaysDate = new Date();
-            return appointment.state !== "COMPLETED" && appDate.getDay() === todaysDate.getDay() && appDate.getMonth() === todaysDate.getMonth() && appDate.getFullYear() === todaysDate.getFullYear();
+            return appointment.state !== "COMPLETED" && appDate.getDate() === todaysDate.getDay() && appDate.getMonth() === todaysDate.getMonth() && appDate.getFullYear() === todaysDate.getFullYear();
 
         }));
 

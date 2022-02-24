@@ -44,9 +44,7 @@ const UserItem = props => {
           <Button component={Link} to={`/patients/${props.id}`} color='teal' variant="light" radius="md">
             See details
           </Button>
-          <Button component={Link} to={`/patients/${props.id}`}  color='teal' variant="light" radius="md">
-            <BsCaretDownFill />
-          </Button>
+          
         </div>
 
 

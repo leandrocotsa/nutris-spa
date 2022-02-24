@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from '@mantine/hooks';
 
 import { useParams, useNavigate } from 'react-router-dom';
@@ -6,9 +6,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Modal, Radio, RadioGroup, Select, TextInput } from '@mantine/core';
 import { DatePicker, TimeInput } from '@mantine/dates';
 
+import { useNotifications } from '@mantine/notifications';
+
+import { BsCheckCircleFill } from 'react-icons/bs';
+
+
 
 import './NewAppointmentModal.css';
 import { useHttpClient } from '../../shared/hooks/http-hook';
+import { AuthContext } from '../../shared/context/auth-context';
 
 
 const NewAppointmentModal = props => {
@@ -18,6 +24,12 @@ const NewAppointmentModal = props => {
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
     const navigate = useNavigate();
+
+    const notifications = useNotifications();
+
+    const auth = useContext(AuthContext);
+
+    
 
     //verificar se é modal de update ou create appointment 
 
@@ -48,7 +60,7 @@ const NewAppointmentModal = props => {
                         'GET', null,
                         {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
+                            'Authorization': 'Bearer ' + auth.token
                         }
                     );
 
@@ -104,11 +116,18 @@ const NewAppointmentModal = props => {
                 JSON.stringify(newAppointment),
                 {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
+                    'Authorization': 'Bearer ' + auth.token
 
                 }
             );
             navigate("/");
+            notifications.showNotification({
+                title: 'Appointment created!',
+                message: 'You can check all your appointments in the Appointment page.',
+                radius: 'lg',
+                icon: (<BsCheckCircleFill />),
+                color: "teal"
+              })
         } catch (err) {
 
         }

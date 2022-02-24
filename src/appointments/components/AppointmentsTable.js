@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -9,6 +9,8 @@ import { BsCaretDownFill, BsFillTrashFill } from 'react-icons/bs';
 import { BiCalendarStar, BiSearch } from 'react-icons/bi';
 import { FiFilter } from 'react-icons/fi';
 
+
+import { BsCheckCircleFill } from 'react-icons/bs';
 import { AiOutlineEdit } from 'react-icons/ai';
 
 
@@ -18,16 +20,24 @@ import WarningModal from '../../shared/components/FormElements/WarningModal';
 import { useForm } from '@mantine/hooks';
 import EditAppointmentModal from './EditAppointmentModal';
 import { useHttpClient } from '../../shared/hooks/http-hook';
+import { useNotifications } from '@mantine/notifications';
+import { AuthContext } from '../../shared/context/auth-context';
+
+
 
 const reformatDate = (dateStart, dateEnd) => {
     const dateString = new Date(dateStart).toLocaleString().replace(/AM|PM/, '')
-    return dateString.substring(0, dateString.length-4);
+    return dateString.substring(0, dateString.length - 4);
 };
 
 
 const AppointmentsTable = props => {
 
+    const notifications = useNotifications();
+
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+    const auth = useContext(AuthContext);
 
     //dois useEffect
     //um para obter os appintemnts todos da nutricionista
@@ -44,6 +54,8 @@ const AppointmentsTable = props => {
 
 
     const [currentAppointments, setCurrentAppointments] = useState([]);
+
+
 
 
 
@@ -82,11 +94,19 @@ const AppointmentsTable = props => {
                 null,
                 {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
+                    'Authorization': 'Bearer ' + auth.token
                 }
             );
 
+
             props.onDelete(selectedAppointment.id);
+            notifications.showNotification({
+                title: 'Appointment deleted!',
+                message: 'You can check all your appointments in the Appointment page.',
+                radius: 'lg',
+                icon: (<BsCheckCircleFill />),
+                color: "red"
+            })
         } catch (err) {
 
         }
@@ -160,14 +180,14 @@ const AppointmentsTable = props => {
                         }>
 
                         {appointment.state !== "COMPLETED"
-                            ? <Menu.Item 
-                            component={Link} 
-                            to={appointment.patientId === null
-                                ? "/patients/new"
-                                : `/appointments/${appointment.id}/measurements?patient=${appointment.patientId}`
-                            } 
-                            state={{ appointmentId: appointment.id}}
-                            icon={<BiCalendarStar />}>Start</Menu.Item>
+                            ? <Menu.Item
+                                component={Link}
+                                to={appointment.patientId === null
+                                    ? "/patients/new"
+                                    : `/appointments/${appointment.id}/measurements?patient=${appointment.patientId}`
+                                }
+                                state={{ appointmentId: appointment.id }}
+                                icon={<BiCalendarStar />}>Start</Menu.Item>
                             : <Menu.Item disabled icon={<BiCalendarStar />}>Start</Menu.Item>
                         }
 
@@ -197,7 +217,7 @@ const AppointmentsTable = props => {
                     setOpenedWarning(false)
                 }}
                 onConfirm={deleteAppointment}
-                
+
                 message="Are you sure you want to delete this appointment? This operation cannot be undone."
             />
 
@@ -273,20 +293,23 @@ const AppointmentsTable = props => {
 
                 }
 
-                <Table verticalSpacing="sm">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            {props.patientName && <th>Patient</th>}
-                            {props.type && <th>Type</th>}
-                            <th>State</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>{rows}</tbody>
-                </Table>
+                <div className='all-appointment-table-container'>
+                    <Table verticalSpacing="sm">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                {props.patientName && <th>Patient</th>}
+                                {props.type && <th>Type</th>}
+                                <th>State</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>{rows}</tbody>
+                    </Table>
 
-                {currentAppointments.length === 0 && <p className='center empty-warning'>No appointments found!</p>}
+                    {currentAppointments.length === 0 && <p className='center empty-warning'>No appointments found!</p>}
+
+                </div>
 
             </div>
         </React.Fragment>

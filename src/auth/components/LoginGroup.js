@@ -37,7 +37,7 @@ const LoginGroup = props => {
         event.preventDefault();
 
         try {
-            await sendRequest(
+            const responseData = await sendRequest(
                 'http://localhost:8080/login',
                 'POST',
                 JSON.stringify(form.values),
@@ -45,7 +45,8 @@ const LoginGroup = props => {
                     'Content-Type': 'application/json'
                 }
             );
-            auth.login();
+
+            auth.login(responseData.token);
         } catch (err) {
 
         }

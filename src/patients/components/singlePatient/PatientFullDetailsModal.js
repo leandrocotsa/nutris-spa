@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 
 import { Button, Modal, Radio, RadioGroup, TextInput, Divider, Select, NumberInput, ColorInput, Textarea } from '@mantine/core';
@@ -12,6 +12,11 @@ import { useHttpClient } from '../../../shared/hooks/http-hook';
 import { useForceUpdate } from '../../../shared/hooks/force-update-hook';
 
 
+import { BsCheckCircleFill } from 'react-icons/bs';
+import { useNotifications } from '@mantine/notifications';
+import { AuthContext } from '../../../shared/context/auth-context';
+
+
 
 
 const PatientFullDetailsModal = props => {
@@ -21,6 +26,11 @@ const PatientFullDetailsModal = props => {
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
     const navigate = useNavigate();
+
+
+    const notifications = useNotifications();
+
+    const auth = useContext(AuthContext);
 
 
 
@@ -101,7 +111,7 @@ const PatientFullDetailsModal = props => {
                 waterConsumption: editPatientForm.values.waterConsumption,
                 weekendExceptions: editPatientForm.values.weekendExceptions
             },
-            birthDate: new Date(editPatientForm.values.birthDate).toISOString(),
+            birthDate: new Date(editPatientForm.values.birthDate),
             email: editPatientForm.values.email,
             familyNumber: editPatientForm.values.familyNumber,
             firstName: editPatientForm.values.firstName,
@@ -111,7 +121,7 @@ const PatientFullDetailsModal = props => {
             sex: editPatientForm.values.sex
         }
 
-        console.log(updatedPatient);
+
         //nao está a ir para o backend
         try {
             const responseData = await sendRequest(
@@ -120,12 +130,19 @@ const PatientFullDetailsModal = props => {
                 JSON.stringify(updatedPatient),
                 {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
+                    'Authorization': 'Bearer ' + auth.token
 
                 }
             );
             fullOnClose();
             navigate(`/patients`);
+            notifications.showNotification({
+                title: 'Patient updated!',
+                message: 'You can check all your patients in the Patients page.',
+                radius: 'lg',
+                icon: (<BsCheckCircleFill />),
+                color: "teal"
+            })
         } catch (err) {
 
         }

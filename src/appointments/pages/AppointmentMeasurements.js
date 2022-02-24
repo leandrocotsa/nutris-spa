@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { Button, Radio, RadioGroup, TextInput, Divider, Select, NumberInput, Loader } from '@mantine/core';
@@ -12,6 +12,10 @@ import MeasurementsCard from '../../patients/components/singlePatient/Measuremen
 import Card from '../../shared/components/UIElements/Card';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { useForm } from '@mantine/hooks';
+
+import { BsCheckCircleFill } from 'react-icons/bs';
+import { useNotifications } from '@mantine/notifications';
+import { AuthContext } from '../../shared/context/auth-context';
 
 
 const AppointmentMeasurements = (props) => {
@@ -30,6 +34,10 @@ const AppointmentMeasurements = (props) => {
 
   const navigate = useNavigate();
 
+  const notifications = useNotifications();
+
+  const auth = useContext(AuthContext);
+
   useEffect(() => {
 
 
@@ -41,11 +49,11 @@ const AppointmentMeasurements = (props) => {
           'GET', null,
           {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
+            'Authorization': 'Bearer ' + auth.token
           }
         );
 
-        console.log(responseData);
+
         setLoadedPatient(responseData);
 
 
@@ -111,7 +119,7 @@ const AppointmentMeasurements = (props) => {
 
     }
 
-    console.log(newMeasurements);
+
     //nao está a ir para o backend
     try {
       await sendRequest(
@@ -120,12 +128,20 @@ const AppointmentMeasurements = (props) => {
         JSON.stringify(newMeasurements),
         {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
+          'Authorization': 'Bearer ' + auth.token
 
         }
       );
 
       navigate(`/patients/${patientId}`);
+
+      notifications.showNotification({
+        title: 'Appointment finished!',
+        message: 'You can check all your appointments in the Appointments page.',
+        radius: 'lg',
+        icon: (<BsCheckCircleFill />),
+        color: "teal"
+      })
     } catch (err) {
     }
 

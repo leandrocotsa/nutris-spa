@@ -27,7 +27,7 @@ const OngoingAppointmentForm = props => {
 
     const appointmentId = useParams().appointmentId;
 
-    console.log(appointmentId);
+
 
     return (
         <div className="main__wrapper">

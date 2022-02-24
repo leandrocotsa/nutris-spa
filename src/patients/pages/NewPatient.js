@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import Card from '../../shared/components/UIElements/Card';
 
@@ -14,6 +14,10 @@ import NewPatientForm from '../components/NewPatientForm';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { useForm } from '@mantine/hooks';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useNotifications } from '@mantine/notifications';
+
+import { BsCheckCircleFill } from 'react-icons/bs';
+import { AuthContext } from '../../shared/context/auth-context';
 
 
 const NewPatient = (props) => {
@@ -25,6 +29,10 @@ const NewPatient = (props) => {
 
   const location = useLocation();
   const { appointmentId } = location.state;
+
+  const notifications = useNotifications();
+
+  const auth = useContext(AuthContext);
 
 
 
@@ -107,7 +115,7 @@ const NewPatient = (props) => {
       sex: form.values.sex
     }
 
-    console.log(newPatient);
+
     //nao está a ir para o backend
     try {
       const responseData = await sendRequest(
@@ -116,12 +124,19 @@ const NewPatient = (props) => {
         JSON.stringify(newPatient),
         {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
+          'Authorization': 'Bearer ' + auth.token
 
         }
       );
 
       navigate(`/appointments/${appointmentId}/measurements?${responseData.id}`);
+      notifications.showNotification({
+        title: 'Patient created!',
+        message: 'You can check all your patients in the Patients page.',
+        radius: 'lg',
+        icon: (<BsCheckCircleFill />),
+        color: "teal"
+      })
     } catch (err) {
 
     }

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { TextInput, Loader } from '@mantine/core';
+import { TextInput, Loader, Pagination } from '@mantine/core';
 
 import { BiSearch } from 'react-icons/bi';
 
@@ -8,7 +8,16 @@ import PatientItem from './PatientItem';
 
 import './PatientsList.css';
 
+import { chunk } from "lodash";
+
 const PatientsList = props => {
+
+  const [activePage, setPage] = useState(1);
+
+
+  const patientsPage = chunk(props.patients, 10);
+
+
 
   return (
 
@@ -27,17 +36,23 @@ const PatientsList = props => {
 
           (props.patients.length === 0 ? <p className='center empty-warning'>No patients found!</p>
             :
-            props.patients.map(patient => (
-              <PatientItem
-                key={patient.id}
-                id={patient.id}
-                image={patient.image}
-                name={patient.fullName}
-                currentWeight={patient.currentWeight}
-                weightGoal={patient.desiredWeight}
-                birthDate={patient.birthDate}
-              />
-            ))
+
+            <React.Fragment>
+              {patientsPage[activePage - 1].map(patient => (
+                <PatientItem
+                  key={patient.id}
+                  id={patient.id}
+                  image={patient.image}
+                  name={patient.fullName}
+                  currentWeight={patient.currentWeight}
+                  weightGoal={patient.desiredWeight}
+                  birthDate={patient.birthDate}
+                />
+              ))}
+
+              <Pagination color="teal" size="sm" radius="md" total={patientsPage.length} page={activePage} onChange={setPage} />
+
+            </React.Fragment>
           )
 
 

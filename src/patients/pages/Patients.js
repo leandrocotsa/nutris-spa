@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../../shared/context/auth-context';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 
 import PatientsList from '../components/PatientsList';
@@ -9,6 +10,8 @@ const Patients = () => {
   const [loadedPatients, setLoadedPatients] = useState();
 
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+  const auth = useContext(AuthContext);
 
 
 
@@ -21,7 +24,7 @@ const Patients = () => {
           'GET', null,
           {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
+            'Authorization': 'Bearer ' + auth.token
           }
         );
         setLoadedPatients(responseData);

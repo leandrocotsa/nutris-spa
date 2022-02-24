@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import GraphsCard from '../components/singlePatient/GraphsCard';
@@ -9,6 +9,7 @@ import PatientCard from '../components/singlePatient/PatientCard';
 import PatientGroup from '../components/singlePatient/PatientGroup';
 
 import { Loader } from '@mantine/core';
+import { AuthContext } from '../../shared/context/auth-context';
 
 
 const Patient = () => {
@@ -18,6 +19,8 @@ const Patient = () => {
   const [loadedPatient, setLoadedPatient] = useState();
 
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+  const auth = useContext(AuthContext);
 
 
 
@@ -34,7 +37,7 @@ const Patient = () => {
           'GET', null,
           {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtakBnbWFpbC5jb20iLCJhdWQiOiJST0xFX05VVFJJVElPTklTVCIsImV4cCI6MTY1NDM1NjA0NiwiaWF0IjoxNjQ1NzE2MDQ2LCJqdGkiOiIxIn0.fPi-lfPU8PN4aSitBAVHKH4Y_j1dVvf5fmCk8UtaEZKRPZDiNiJpfEjLIzRRk0Oy86R9uE6bVOKZZBDKFCg5DA'
+            'Authorization': 'Bearer ' + auth.token
           }
         );
         setLoadedPatient(responseData);
