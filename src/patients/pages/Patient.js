@@ -6,11 +6,12 @@ import MeasurementsCard from '../components/singlePatient/MeasurementsCard';
 import PatientAppointmentsCard from '../components/singlePatient/PatientAppointmentsCard';
 import PatientCard from '../components/singlePatient/PatientCard';
 
-import PatientGroup from '../components/singlePatient/PatientGroup';
 
 import { Loader } from '@mantine/core';
 import { AuthContext } from '../../shared/context/auth-context';
 
+
+import './Patient.css';
 
 const Patient = () => {
 
@@ -18,7 +19,7 @@ const Patient = () => {
 
   const [loadedPatient, setLoadedPatient] = useState();
 
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, sendRequest } = useHttpClient();
 
   const auth = useContext(AuthContext);
 
@@ -47,10 +48,7 @@ const Patient = () => {
     };
     fetchAppointments();
 
-    //first fetch with all appointments
-    //set dos appointments no current
-    //props que faz fazer fetch de tudo ou so dos de hoje?
-  }, [sendRequest]);
+  }, [auth.token, patientId, sendRequest]);
 
   
 

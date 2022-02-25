@@ -14,6 +14,8 @@ import PatientFullDetailsModal from './PatientFullDetailsModal'
 
 import { BsCheckCircleFill } from 'react-icons/bs';
 
+import { format } from 'fecha';
+
 
 
 
@@ -30,7 +32,7 @@ const PatientCard = props => {
 
     const [openedWarning, setOpenedWarning] = useState(false);
 
-    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const { sendRequest } = useHttpClient();
 
     const navigate = useNavigate();
     const notifications = useNotifications();
@@ -109,7 +111,7 @@ const PatientCard = props => {
                     </div>
 
                     <div className="patient-card__info">
-                        <h4><FaBirthdayCake /> {props.patient.birthDate}</h4>
+                        <h4><FaBirthdayCake /> {format(new Date(props.patient.birthDate), 'DD-MM-YYYY')}</h4>
                     </div>
 
                     <div className="patient-card__info">

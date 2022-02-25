@@ -1,10 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
-import { Button, Radio, RadioGroup, TextInput, Divider, Select, NumberInput, Loader } from '@mantine/core';
-
-
-import OngoingAppointmentForm from '../components/OngoingAppointmentForm';
+import { Button, NumberInput, Loader } from '@mantine/core';
 
 import './AppointmentMeasurements.css';
 import PatientCard from '../../patients/components/singlePatient/PatientCard';
@@ -24,13 +21,13 @@ const AppointmentMeasurements = (props) => {
   //fetch do patient e por num state
   const appointmentId = useParams().appointmentId;
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const patientId = searchParams.get("patient");
 
 
   const [loadedPatient, setLoadedPatient] = useState();
 
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, sendRequest } = useHttpClient();
 
   const navigate = useNavigate();
 
@@ -69,7 +66,7 @@ const AppointmentMeasurements = (props) => {
     //first fetch with all appointments
     //set dos appointments no current
     //props que faz fazer fetch de tudo ou so dos de hoje?
-  }, [patientId, sendRequest]);
+  }, [auth.token, patientId, sendRequest]);
 
 
 

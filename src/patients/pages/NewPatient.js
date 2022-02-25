@@ -1,16 +1,18 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 
 import Card from '../../shared/components/UIElements/Card';
 
-import { Button, Radio, RadioGroup, TextInput, Select, NumberInput, ColorInput, Textarea, Accordion, ThemeIcon, PasswordInput } from '@mantine/core';
+import { Button, Group, Radio, RadioGroup, TextInput, Select, NumberInput, ColorInput, Textarea, Accordion, ThemeIcon, PasswordInput } from '@mantine/core';
 import { DatePicker, TimeInput } from '@mantine/dates';
 
 import { BsFilePerson } from 'react-icons/bs';
 import { MdMedicalServices } from 'react-icons/md';
 import { IoLogIn } from 'react-icons/io5';
 
+import { Dropzone } from '@mantine/dropzone';
 
-import NewPatientForm from '../components/NewPatientForm';
+
+
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { useForm } from '@mantine/hooks';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -20,10 +22,14 @@ import { BsCheckCircleFill } from 'react-icons/bs';
 import { AuthContext } from '../../shared/context/auth-context';
 
 
+import './NewPatient.css';
+
+
 const NewPatient = (props) => {
 
 
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+  const { sendRequest } = useHttpClient();
 
   const navigate = useNavigate();
 
@@ -33,6 +39,7 @@ const NewPatient = (props) => {
   const notifications = useNotifications();
 
   const auth = useContext(AuthContext);
+  const openRef = useRef();
 
 
 
@@ -129,7 +136,7 @@ const NewPatient = (props) => {
         }
       );
 
-      navigate(`/appointments/${appointmentId}/measurements?${responseData.id}`);
+      navigate(`/appointments/${appointmentId}/measurements?patient=${responseData.id}`);
       notifications.showNotification({
         title: 'Patient created!',
         message: 'You can check all your patients in the Patients page.',
@@ -142,6 +149,16 @@ const NewPatient = (props) => {
     }
 
   }
+
+  const filePickedHandler = async (event) => { 
+
+    if(event.target.files && event.target.files.length === 1) {
+
+    }
+
+
+  }
+  
 
 
   return (
@@ -193,6 +210,9 @@ const NewPatient = (props) => {
                       {...form.getInputProps('lastName')}
                     />
                   </div>
+
+
+
 
                   <div className="new-patient-form__item">
                     <DatePicker

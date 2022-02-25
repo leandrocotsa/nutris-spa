@@ -10,7 +10,7 @@ import { useHttpClient } from '../../shared/hooks/http-hook';
 
 const MainPageGroup = props => {
 
-    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const { isLoading, sendRequest } = useHttpClient();
 
     const [loadedAppointments, setLoadedAppointments] = useState();
 

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Card from '../../shared/components/UIElements/Card'
 
 
-import { Accordion, ThemeIcon, Button, Progress } from '@mantine/core';
+import { Accordion, Button, Progress } from '@mantine/core';
 
 
 import './FoodPlanGroup.css';

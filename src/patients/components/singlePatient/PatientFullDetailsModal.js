@@ -2,14 +2,15 @@ import React, { useContext, useState } from 'react';
 
 
 import { Button, Modal, Radio, RadioGroup, TextInput, Divider, Select, NumberInput, ColorInput, Textarea } from '@mantine/core';
-import { DatePicker, TimeInput } from '@mantine/dates';
+import { DatePicker } from '@mantine/dates';
 import { useForm } from '@mantine/hooks';
 
 
 import './PatientFullDetailsModal.css';
 import { useNavigate } from 'react-router-dom';
 import { useHttpClient } from '../../../shared/hooks/http-hook';
-import { useForceUpdate } from '../../../shared/hooks/force-update-hook';
+
+import { format } from 'fecha';
 
 
 import { BsCheckCircleFill } from 'react-icons/bs';
@@ -23,7 +24,7 @@ const PatientFullDetailsModal = props => {
 
     const [editView, setEditView] = useState(false);
 
-    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const { sendRequest } = useHttpClient();
 
     const navigate = useNavigate();
 
@@ -124,7 +125,7 @@ const PatientFullDetailsModal = props => {
 
         //nao está a ir para o backend
         try {
-            const responseData = await sendRequest(
+            await sendRequest(
                 `http://localhost:8080/patients/${props.patient.id}`,
                 'PATCH',
                 JSON.stringify(updatedPatient),
@@ -570,7 +571,7 @@ const PatientFullDetailsModal = props => {
                             </div>
 
                             <div className="anamnesis__info">
-                                <h4>Birthdate: <span className='measurement-value'>{props.patient.birthDate}</span></h4>
+                                <h4>Birthdate: <span className='measurement-value'>{format(new Date(props.patient.birthDate), 'DD-MM-YYYY')}</span></h4>
                             </div>
 
                             <div className="anamnesis__info">

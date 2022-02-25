@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import Card from '../../shared/components/UIElements/Card';
 
@@ -11,7 +11,6 @@ import { AppointmentsTable } from './AppointmentsTable';
 
 
 import './AllAppointmentsCard.css';
-import { useHttpClient } from '../../shared/hooks/http-hook';
 
 
 const AllAppointmentsCard = props => {

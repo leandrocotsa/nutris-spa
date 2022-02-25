@@ -5,12 +5,15 @@
     flex-grow: 1;
   }
 
+  .patient-item__info-name {
+    margin-right: 18px;
+    margin-left: 18px;
+    flex-grow: 1;
+    width: 160px;
+  }
+
   .patient-item__image {
-    width: 80px;
-    height: 80px;
     align-self: center;
-    min-width:60px;
-    min-height:60px;
     margin-right: 20px;
     margin-left: 20px;
   }

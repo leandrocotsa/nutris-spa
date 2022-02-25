@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { TextInput, Loader, Pagination } from '@mantine/core';
 
@@ -14,8 +14,30 @@ const PatientsList = props => {
 
   const [activePage, setPage] = useState(1);
 
+  const [patientsPage, setPatientsPage] = useState();
 
-  const patientsPage = chunk(props.patients, 10);
+
+
+
+
+  const [searchText, setSearchText] = useState('');
+
+  useEffect(() => {
+
+
+
+    const patientsFiltered = props.patients.filter(patient =>
+      patient.fullName.toLowerCase().indexOf(searchText.toLowerCase()) >= 0);
+
+
+    setPatientsPage(chunk(patientsFiltered, 10));
+
+
+
+
+
+
+  }, [props.patients, searchText]);
 
 
 
@@ -27,14 +49,16 @@ const PatientsList = props => {
         <TextInput
           radius="md"
           size="xs"
+          onChange={(event) => setSearchText(event.target.value)}
+          value={searchText}
           icon={<BiSearch />} />
 
       </div>
       <ul className="patients-list">
 
-        {!props.isLoading && props.patients ?
+        {props.patients && patientsPage ?
 
-          (props.patients.length === 0 ? <p className='center empty-warning'>No patients found!</p>
+          (patientsPage.length === 0 ? <p className='center empty-warning'>No patients found!</p>
             :
 
             <React.Fragment>

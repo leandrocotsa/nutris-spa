@@ -17,7 +17,6 @@ import { AiOutlineEdit } from 'react-icons/ai';
 import './AppointmentsTable.css';
 
 import WarningModal from '../../shared/components/FormElements/WarningModal';
-import { useForm } from '@mantine/hooks';
 import EditAppointmentModal from './EditAppointmentModal';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { useNotifications } from '@mantine/notifications';
@@ -35,7 +34,7 @@ const AppointmentsTable = props => {
 
     const notifications = useNotifications();
 
-    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const { sendRequest } = useHttpClient();
 
     const auth = useContext(AuthContext);
 
@@ -51,6 +50,8 @@ const AppointmentsTable = props => {
     const [selectedAppointmentType, setSelectedAppointmentType] = useState('');
     const [enteredSearchText, setEnteredSearchText] = useState('');
     const [selectedAppointment, setSelectedAppointment] = useState({});
+
+    const [dateRange, setDateRange] = useState([]);
 
 
     const [currentAppointments, setCurrentAppointments] = useState([]);
@@ -77,11 +78,30 @@ const AppointmentsTable = props => {
                     return (appointment.type === selectedAppointmentType)
                 } return true;
 
-            }))
+            })
+            .filter(appointment => {
+                return appointment.patientName.toLowerCase().indexOf(enteredSearchText.toLowerCase()) >= 0;
+            })
+            .filter(appointment => {
+
+                const startDate = new Date(appointment.startTime);
+                const endDate = new Date(appointment.endTime);
+                   
+                return (dateRange[0] && dateRange[1]) ? dateRange[1] >= startDate && dateRange[0] <= endDate : true;
+            })
+
+
+        );
+
+
+
+ 
+
+
         //filters
         //set current appointemnts
 
-    }, [selectedAppointmentState, selectedAppointmentType, enteredSearchText, props.appointments]);
+    }, [selectedAppointmentState, selectedAppointmentType, enteredSearchText, props.appointments, dateRange]);
 
 
 
@@ -115,14 +135,6 @@ const AppointmentsTable = props => {
 
 
 
-    const appointmentStateChangeHandler = (event) => {
-        setSelectedAppointmentState(event);
-    }
-
-
-    const appointmentTypeChangeHandler = (event) => {
-        setSelectedAppointmentType(event);
-    }
 
 
     const rows = currentAppointments.map((appointment) => (
@@ -243,6 +255,10 @@ const AppointmentsTable = props => {
                                     variant="filled"
                                     radius="md"
                                     size="xs"
+                                    value={dateRange}
+                                    onChange={(event) =>
+                                        setDateRange(event)
+                                    }
 
                                 />
                                 <TextInput
@@ -251,6 +267,10 @@ const AppointmentsTable = props => {
                                     radius="md"
                                     size="xs"
                                     variant="filled"
+                                    value={enteredSearchText}
+                                    onChange={(event) =>
+                                        setEnteredSearchText(event.target.value)
+                                    }
                                     icon={<BiSearch />}
 
 
@@ -264,7 +284,9 @@ const AppointmentsTable = props => {
                                     radius="md"
                                     size="xs"
                                     value={selectedAppointmentType}
-                                    onChange={appointmentTypeChangeHandler}
+                                    onChange={(event) =>
+                                        setSelectedAppointmentType(event)
+                                    }
                                     data={[
                                         { value: 'FIRST', label: 'First' },
                                         { value: 'FOLLOWING', label: 'Following' }
@@ -280,7 +302,8 @@ const AppointmentsTable = props => {
                                     radius="md"
                                     size="xs"
                                     value={selectedAppointmentState}
-                                    onChange={appointmentStateChangeHandler}
+                                    onChange={(event) =>
+                                        setSelectedAppointmentState(event)}
                                     data={[
                                         { value: 'COMPLETED', label: 'Completed' },
                                         { value: 'SCHEDULED', label: 'Scheduled' }

@@ -14,7 +14,7 @@ const Appointments = () => {
 
   const [loadedAppointments, setLoadedAppointments] = useState();
 
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, sendRequest } = useHttpClient();
 
   const auth = useContext(AuthContext);
 
@@ -42,12 +42,13 @@ const Appointments = () => {
     //first fetch with all appointments
     //set dos appointments no current
     //props que faz fazer fetch de tudo ou so dos de hoje?
-  }, [sendRequest]);
+  }, [auth.token, sendRequest]);
 
 
   const appointmentDeletedHandler = (appointmentId) => {
+
     setLoadedAppointments(prevAppointments => {
-      prevAppointments.filter(appointment => appointment.id !== appointmentId);
+      return prevAppointments.filter(appointment => appointment.id !== appointmentId);
     })
   }
 

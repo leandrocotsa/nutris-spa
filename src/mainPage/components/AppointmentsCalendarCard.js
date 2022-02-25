@@ -31,11 +31,12 @@ const AppointmentsCalendarCard = props => {
 
     useEffect(() => {
 
+
         setCalendarAppointments(props.appointments.map(appointment => {
             return {
                 id: appointment.id,
-                startAt: appointment.startTime,
-                endAt: appointment.endTime,
+                startAt: new Date(appointment.startTime).toISOString(),
+                endAt: new Date(appointment.endTime).toISOString(),
                 timezoneStartAt: 'Europe/Berlin', // optional
                 summary: appointment.patientName,
                 color: colors[Math.floor(Math.random() * colors.length - 1) + 1],
@@ -44,46 +45,6 @@ const AppointmentsCalendarCard = props => {
         }));
 
     }, [props.appointments]);
-
-
-
-
-
-    const events = [
-        {
-            id: 1,
-            startAt: '2021-11-17T13:35:00.000Z',
-            endAt: '2021-11-17T14:30:00.000Z',
-            timezoneStartAt: 'Europe/Berlin', // optional
-            summary: 'test',
-            color: 'red',
-            calendarID: 'work'
-        },
-        {
-            id: 2,
-            startAt: '2021-11-21T18:00:00.000Z',
-            endAt: '2021-11-21T19:00:00.000Z',
-            timezoneStartAt: 'Europe/Berlin', // optional
-            summary: 'test',
-            color: 'blue',
-        }, {
-            id: 3,
-            startAt: '2021-11-15T17:05:00.000Z',
-            endAt: '2021-11-15T18:00:00.000Z',
-            timezoneStartAt: 'Europe/Berlin', // optional
-            summary: 'test',
-            color: 'orange',
-            calendarID: 'work'
-        },
-        {
-            id: 4,
-            startAt: '2021-11-21T18:00:00.000Z',
-            endAt: '2021-11-21T19:00:00.000Z',
-            timezoneStartAt: 'Europe/Berlin', // optional
-            summary: 'test',
-            color: 'blue',
-        }
-    ];
 
 
 

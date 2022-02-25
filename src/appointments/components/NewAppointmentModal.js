@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from '@mantine/hooks';
 
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Button, Modal, Radio, RadioGroup, Select, TextInput } from '@mantine/core';
 import { DatePicker, TimeInput } from '@mantine/dates';
@@ -20,8 +20,9 @@ import { AuthContext } from '../../shared/context/auth-context';
 const NewAppointmentModal = props => {
 
     const [loadedPatients, setLoadedPatients] = useState([]);
+    const [isDateTaken, setIsDateTaken] = useState(false);
 
-    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const { sendRequest } = useHttpClient();
 
     const navigate = useNavigate();
 
@@ -47,6 +48,55 @@ const NewAppointmentModal = props => {
         },
     });
 
+
+
+    useEffect(() => {
+
+        if (form.values.date && form.values.startTime && form.values.endTime) {
+            const fetchDateTaken = async () => { //not a good practice to turn useEffect into async so this is the way to go
+
+                const date = new Date(form.values.date).toISOString();
+                const cleanDate = date.substring(0, date.indexOf('T'));
+        
+        
+                const start = new Date(form.values.startTime).toISOString();
+                const startTime = start.substring(start.indexOf("T") + 1);
+                const end = new Date(form.values.endTime).toISOString();
+                const endTime = end.substring(end.indexOf("T") + 1);
+
+
+                const dateRange = {
+                    startDate: `${cleanDate}T${startTime}`,
+                    endDate: `${cleanDate}T${endTime}`
+                }
+
+                try {
+                    const responseData = await sendRequest(
+                        'http://localhost:8080/appointments/isdatetaken',
+                        'POST', 
+                        JSON.stringify(dateRange),
+                        
+                        {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + auth.token
+                        }
+                    );
+
+                    setIsDateTaken(responseData.response);
+
+
+                } catch (err) {
+
+                }
+            };
+            fetchDateTaken();
+
+        }
+
+        //first fetch with all appointments
+        //set dos appointments no current
+        //props que faz fazer fetch de tudo ou so dos de hoje?
+    }, [form.values.date, form.values.startTime, form.values.endTime, sendRequest, auth.token]);
 
 
     useEffect(() => {
@@ -83,7 +133,7 @@ const NewAppointmentModal = props => {
         //first fetch with all appointments
         //set dos appointments no current
         //props que faz fazer fetch de tudo ou so dos de hoje?
-    }, [form.values.radioPatient, loadedPatients.length, sendRequest]);
+    }, [auth.token, form.values.radioPatient, loadedPatients.length, sendRequest]);
 
 
 
@@ -187,6 +237,10 @@ const NewAppointmentModal = props => {
                         >
                         </TimeInput>
                     </div>
+
+                    {isDateTaken 
+                    && <h4>This date is intercepted by another appointment.</h4>
+                    }
 
                     <div className="new-appointment-form-item">
                         <RadioGroup

@@ -5,12 +5,12 @@ import { Avatar, Loader } from '@mantine/core';
 import { Button } from '@mantine/core';
 
 import { FaCalendarDay } from 'react-icons/fa';
-import { BsCaretDownFill } from 'react-icons/bs';
 
 
 import { reformatDate } from '../../appointments/components/AppointmentsTable';
 
 import './NextAppointmentCard.css';
+import { Link } from 'react-router-dom';
 
 
 const NextAppointmentCard = props => {
@@ -21,12 +21,14 @@ const NextAppointmentCard = props => {
 
     useEffect(() => {
 
-        setNextAppointment(props.appointments.filter(appointment => {
+        const todayAppointments = props.appointments.filter(appointment => {
             let appDate = new Date(appointment.startTime);
             let todaysDate = new Date();
-            return appointment.state !== "COMPLETED" && appDate.getDate() === todaysDate.getDay() && appDate.getMonth() === todaysDate.getMonth() && appDate.getFullYear() === todaysDate.getFullYear();
+            return appointment.state !== "COMPLETED" && appDate.getDate() === todaysDate.getDate() && appDate.getMonth() === todaysDate.getMonth() && appDate.getFullYear() === todaysDate.getFullYear();
 
-        }));
+        });
+
+        setNextAppointment(todayAppointments[todayAppointments.length-1]);
 
     }, [props.appointments]);
 
@@ -45,15 +47,21 @@ const NextAppointmentCard = props => {
                     {nextAppointment.length === 0 ? <p className='center'>No more appointments for today!</p>
                         :
                         <div className='next-appointment-card__container'>
-                            <Avatar src={"https://images.uncyc.org/wikinet/e/eb/Nikocado_Avocado.jpg"} size="xl" radius="xl" />
+                            <Avatar src={"https://images.uncyc.org/wikinet/e/eb/Nikocado_Avocado.jpg"} size="lg" radius="xl" />
                             <div>
-                                <h3 className='dark-gray'>{nextAppointment[0].patientName}</h3>
-                                <h4 className='light-gray'><FaCalendarDay />&nbsp;{reformatDate(nextAppointment[0].startTime)}</h4>
-           
+                                <h3 className='dark-gray'>{nextAppointment.patientName}</h3>
+                                <h4 className='light-gray'><FaCalendarDay />&nbsp;{reformatDate(nextAppointment.startTime)}</h4>
+
                             </div>
 
                             <div className='next-appointment-card__container-buttons'>
-                                <Button color='teal' variant="light" radius="md" compact >
+                                <Button color='teal' variant="light" radius="md"
+                                    component={Link}
+                                    to={nextAppointment.patientId === null
+                                        ? "/patients/new"
+                                        : `/appointments/${nextAppointment.id}/measurements?patient=${nextAppointment.patientId}`
+                                    }
+                                    state={{ appointmentId: nextAppointment.id }} compact >
                                     Start appointment
                                 </Button>
                             </div>
