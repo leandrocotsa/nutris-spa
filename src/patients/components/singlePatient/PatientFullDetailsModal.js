@@ -665,6 +665,29 @@ const PatientFullDetailsModal = props => {
                                 <h4>Daily meals summary: <span className='measurement-value'>{props.patient.anamnesis.dailyMealsSummary}</span></h4>
                             </div>
 
+                            <div className="anamnesis__info">
+                                <h4>Ideal weight: <span className='measurement-value'>{props.patient.macroNutrients.idealWeight.toFixed(2)} kg</span></h4>
+                            </div>
+
+              
+                            <Divider my="xs" label="Macro-nutrients" />
+
+                            <div className="anamnesis__info">
+                                <h4>Daily protein amount: <span className='measurement-value'>{props.patient.macroNutrients.proteins.toFixed(2)} g</span></h4>
+                            </div>
+                            <div className="anamnesis__info">
+                                <h4>Daily fat amount: <span className='measurement-value'>{props.patient.macroNutrients.proteins.toFixed(2)} g</span></h4>
+                            </div>
+                            <div className="anamnesis__info">
+                                <h4>Daily carbohydrates amount: <span className='measurement-value'>{props.patient.macroNutrients.hydrates.toFixed(2)} g</span></h4>
+                            </div>
+                            <div className="anamnesis__info">
+                                <h4>Maximum daily kcal: <span className='measurement-value'>{props.patient.macroNutrients.vet.toFixed(2)}</span></h4>
+                            </div>
+                            <div className="anamnesis__info">
+                                <h4>Minim daily kcal: <span className='measurement-value'>{props.patient.macroNutrients.metBasalCurrentWeight.toFixed(2)}</span></h4>
+                            </div>
+
                         </div>
                         <div className="patient-card__buttons">
                             <Button color='teal' variant="outline" compact onClick={() => setEditView(true)}>Edit</Button>

@@ -8,6 +8,7 @@ import { Accordion, Button, Progress } from '@mantine/core';
 
 
 import './FoodPlanGroup.css';
+import { useLocation } from 'react-router-dom';
 
 const FoodPlanGroup = props => {
 
@@ -20,8 +21,27 @@ const FoodPlanGroup = props => {
 
     const [foodPlan, setFoodPlan] = useState(props.foodPlan);
 
-    const [activeMacroNutrients, setActiveMacroNutrients] = useState(props.foodPlan);
+    const [planMacroNutrients, setPlanMacroNutrients] = useState(props.foodPlan);
 
+
+    const location = useLocation();
+    const { patient } = location.state;
+
+    useEffect(() => {
+
+        //recalculate
+
+        //setPlanMacroNutrients
+
+    }, []); //plan aliments
+
+
+    const patientProtein = patient.macroNutrients.proteins;
+    const patientFat = patient.macroNutrients.fat;
+    const patientHydrates = patient.macroNutrients.hydrates;
+
+
+    //edit food plan logic
     useEffect(() => {
         setFoodPlan(props.foodPlan);
     }, [props.foodPlan])
@@ -47,7 +67,7 @@ const FoodPlanGroup = props => {
     return (
         <div className="main__wrapper">
             <div className="food-plan-group__info">
-                <h1>Food plan of Niko</h1>
+                <h1>Food plan of {patient.firstName + ' ' + patient.lastName}</h1>
                 <p>Create complete food plans</p>
             </div>
             <div className="food-plan-group__container">
@@ -83,23 +103,23 @@ const FoodPlanGroup = props => {
                     <Card className="ref-values-card">
 
                         <div className='ref-values-card-header'>
-                            <h2>Reference macronutrients values</h2>
+                            <h2>Reference macro-nutrients values</h2>
                         </div>
                         <div className='ref-values-card__container'>
                             <div className="ref-values-item">
-                                <h4><span className='ref-value'>Daily protein amount: </span>100g</h4>
+                                <h4><span className='ref-value'>Daily protein amount: </span>{patient.macroNutrients.proteins.toFixed(2)} g</h4>
                             </div>
                             <div className="ref-values-item">
-                                <h4><span className='ref-value'>Daily fat amount: </span>23g</h4>
+                                <h4><span className='ref-value'>Daily fat amount: </span>{patient.macroNutrients.fat.toFixed(2)} g</h4>
                             </div>
                             <div className="ref-values-item">
-                                <h4><span className='ref-value'>Daily carbohydrates amount: </span>44g</h4>
+                                <h4><span className='ref-value'>Daily carbohydrates amount: </span>{patient.macroNutrients.hydrates.toFixed(2)} g</h4>
                             </div>
                             <div className="ref-values-item">
-                                <h4><span className='ref-value'>Maximum daily kcal: </span>1342</h4>
+                                <h4><span className='ref-value'>Maximum daily kcal: </span>{patient.macroNutrients.vet.toFixed(2)} g</h4>
                             </div>
                             <div className="ref-values-item">
-                                <h4><span className='ref-value'>Mininum daily kcal: </span>353</h4>
+                                <h4><span className='ref-value'>Mininum daily kcal: </span>{patient.macroNutrients.metBasalCurrentWeight.toFixed(2)} g</h4>
                             </div>
 
                         </div>
@@ -109,7 +129,7 @@ const FoodPlanGroup = props => {
 
                     <Card className='progress-card'>
                         <div className='progress-card-header'>
-                            <h2>Reference macronutrients values</h2>
+                            <h2>Macro-nutrients state</h2>
                         </div>
 
                         <div>

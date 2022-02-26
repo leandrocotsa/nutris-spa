@@ -4,13 +4,18 @@ import Card from '../../../shared/components/UIElements/Card';
 
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 
+import { format } from 'fecha';
+
 import './MeasurementsCard.css';
+import EditMeasurementsModal from './EditMeasurementsModal';
+import { Button } from '@mantine/core';
 
 let currentPos = 0;
 
 const MeasurementsCard = props => {
 
     const [currentMeasurement, setCurrentMeasurement] = useState(props.measurements[currentPos]);
+    const [openedEditMeasurement, setOpenedEditMeasurement] = useState(false);
 
     useEffect(() => {
         if (props.measurements.length !== 0) {
@@ -39,11 +44,35 @@ const MeasurementsCard = props => {
 
 
         <Card className="measurements-card">
+
             <div className='measurements-card-header'>
 
 
                 <h2>Body Measurements</h2>
-                {props.measurements.length !== 0 && <h4><a href='lol'>Edit</a></h4>}
+
+
+                {props.measurements.length !== 0 && props.editable &&
+
+                    <React.Fragment>
+
+                        <EditMeasurementsModal
+                            centered
+                            overflow="inside"
+                            size={600}
+                            opened={openedEditMeasurement}
+                            radius="lg"
+                            onClose={() => {
+                                setOpenedEditMeasurement(false)
+                            }}
+                            patientId={props.patientId}
+                            measurement={currentMeasurement}
+
+                        />
+
+                        <Button className='measurements-card-header-button'compact color='teal' variant="outline" size="xs" radius="md" onClick={() => setOpenedEditMeasurement(true)}>Edit</Button>
+
+                    </React.Fragment>
+                }
 
 
             </div>
@@ -101,7 +130,7 @@ const MeasurementsCard = props => {
 
                         {currentPos > 0 && <FaAngleLeft size={16} onClick={pressPreviousHandler} />}
 
-                        <span> {currentMeasurement.date} </span>
+                        <span> {format(new Date(currentMeasurement.date), 'DD-MM-YYYY')} </span>
 
                         {currentPos < props.measurements.length - 1 && <FaAngleRight size={16} onClick={pressAfterHandler} />}
 

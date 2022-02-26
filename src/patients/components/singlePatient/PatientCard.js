@@ -22,7 +22,7 @@ import { format } from 'fecha';
 import './PatientCard.css';
 import WarningModal from '../../../shared/components/FormElements/WarningModal';
 import { useHttpClient } from '../../../shared/hooks/http-hook';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useNotifications } from '@mantine/notifications';
 import { AuthContext } from '../../../shared/context/auth-context';
 
@@ -155,7 +155,16 @@ const PatientCard = props => {
                                 control={
                                     <Button compact color='teal' variant="filled" size="xs" radius="md">Food plan</Button>
                                 }>
-                                <Menu.Item icon={<BsFillTrashFill />}>New plan</Menu.Item>
+                             
+
+                                <Menu.Item
+                                component={Link}
+                                to={`/patients/${props.patient.id}/foodplan`}
+                                state={{ patient: props.patient }}
+                                
+                                icon={<BsFillTrashFill />}>New plan</Menu.Item>
+
+
                                 <Menu.Item icon={<AiOutlineEdit />}>Edit plan</Menu.Item>
                                 <Menu.Item color="red" icon={<BsFillTrashFill />}>Delete plan</Menu.Item>
 

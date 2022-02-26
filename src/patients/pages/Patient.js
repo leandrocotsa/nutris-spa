@@ -65,7 +65,7 @@ const Patient = () => {
         <React.Fragment>
           <div className="patient-group__container">
             <PatientAppointmentsCard appointments={loadedPatient.appointmentsList} />
-            <MeasurementsCard measurements={loadedPatient.measurementsList} />
+            <MeasurementsCard measurements={loadedPatient.measurementsList} patientId={loadedPatient.id} editable/>
             <PatientCard patient={loadedPatient} editable={true} />
           </div>
           <GraphsCard measurements={loadedPatient.measurementsList} />

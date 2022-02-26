@@ -43,13 +43,13 @@ const GraphsCard = props => {
 
             <div className='graphs-card__container'>
                 <div className='graphs-card__graph'>
-                    <GenericLineChart measurements={props.measurements} graphSpecs={yValuesFirstGraph} />
+                    <GenericLineChart graphData={props.measurements} graphSpecs={yValuesFirstGraph} />
                 </div>
                 <div className='graphs-card__graph'>
-                    <GenericLineChart measurements={props.measurements} graphSpecs={yValuesSecondGraph} />
+                    <GenericLineChart graphData={props.measurements} graphSpecs={yValuesSecondGraph} />
                 </div>
                 <div className='graphs-card__graph'>
-                    <GenericLineChart measurements={props.measurements} graphSpecs={yValuesThirdGraph} />
+                    <GenericLineChart graphData={props.measurements} graphSpecs={yValuesThirdGraph} />
                 </div>
 
             </div>

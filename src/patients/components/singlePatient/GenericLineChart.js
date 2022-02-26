@@ -10,7 +10,7 @@ const GenericLineChart = props => {
     return (
 
         <div className='chart__container'>
-        <LineChart width={330} height={200} data={props.measurements}
+        <LineChart width={330} height={200} data={props.graphData}
             margin={{ top: 10, right: 20, left: 20, bottom: 5 }}>
 
             <XAxis dataKey="date" />

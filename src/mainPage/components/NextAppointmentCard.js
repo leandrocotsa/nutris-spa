@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
 
 const NextAppointmentCard = props => {
 
-    const [nextAppointment, setNextAppointment] = useState();
+    const [nextAppointment, setNextAppointment] = useState([]);
 
 
 
@@ -28,7 +28,13 @@ const NextAppointmentCard = props => {
 
         });
 
-        setNextAppointment(todayAppointments[todayAppointments.length-1]);
+        if(todayAppointments.length !==0) {
+            setNextAppointment(todayAppointments[todayAppointments.length-1]);
+        } else {
+            setNextAppointment([]);
+        }
+
+        
 
     }, [props.appointments]);
 
