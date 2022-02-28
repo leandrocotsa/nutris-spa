@@ -122,9 +122,6 @@ const FoodPlanGroup = props => {
 
         console.log(JSON.stringify({foodDiaries: foodDiaries}));
         
-
-
-    
         
         try {
             const responseData = await sendRequest(

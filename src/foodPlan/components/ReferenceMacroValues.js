@@ -34,10 +34,10 @@ const ReferenceMacroValues = props => {
                     <h4><span className='ref-value'>Daily carbohydrates amount: </span>{props.patient.macroNutrients.hydrates.toFixed(2)} g</h4>
                 </div>
                 <div className="ref-values-item">
-                    <h4><span className='ref-value'>Maximum daily kcal: </span>{props.patient.macroNutrients.vet.toFixed(2)} g</h4>
+                    <h4><span className='ref-value'>Maximum daily kcal: </span>{props.patient.macroNutrients.metBasalCurrentWeight.toFixed(2)} g</h4>
                 </div>
                 <div className="ref-values-item">
-                    <h4><span className='ref-value'>Mininum daily kcal: </span>{props.patient.macroNutrients.metBasalCurrentWeight.toFixed(2)} g</h4>
+                    <h4><span className='ref-value'>Mininum daily kcal: </span>{props.patient.macroNutrients.vet.toFixed(2)} g</h4>
                 </div>
 
             </div>

@@ -93,6 +93,14 @@
     margin-top: 15px;
 }
 
+.login-form__submit-button p {
+    margin-top: 10px;
+}
+
+.login-form__submit-button a {
+    color: var(--titles-color);
+}
+
 
 @media (max-width: 1000px) {
     .login-logo-container-left img {

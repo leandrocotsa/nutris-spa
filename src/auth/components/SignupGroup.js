@@ -6,6 +6,7 @@ import { useForm } from '@mantine/hooks';
 import './LoginGroup.css';
 import { AuthContext } from '../../shared/context/auth-context';
 import { useHttpClient } from '../../shared/hooks/http-hook';
+import { Link } from 'react-router-dom';
 
 const SignupGroup = props => {
 
@@ -164,6 +165,7 @@ const SignupGroup = props => {
                         <div className='login-form__submit-button'>
                             <Button type="submit" color='teal' variant="light" compact>Sign up{isLoading && <> &nbsp; <Loader color="teal" size="sm" variant="dots" /></>}</Button>
                             {error && <p className='login-form__error-message'>{error}</p>}
+                            <p>Already have an account? Click <Link to='/login'> here</Link> to Login.</p>
                         </div>
                     </form>
                 </div>
