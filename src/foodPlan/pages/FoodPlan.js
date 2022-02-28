@@ -14,12 +14,14 @@ const FoodPlan = () => {
 
   const [loadedAliments, setLoadedAliments] = useState();
 
+  const [loadedPlan, setLoadedPlan] = useState();
+
   const { isLoading, sendRequest } = useHttpClient();
 
   const auth = useContext(AuthContext);
 
   useEffect(() => {
-    const fetchAppointments = async () => {
+    const fetchAliments = async () => {
       try {
         const responseData = await sendRequest(
           'http://localhost:8080/aliments/',
@@ -34,9 +36,35 @@ const FoodPlan = () => {
 
       }
     };
-    fetchAppointments();
+    fetchAliments();
 
   }, [auth.token, sendRequest]);
+
+
+
+
+  useEffect(() => {
+    if(patient.hasFoodplan) {
+    const fetchFoodPlan = async () => {
+      try {
+        const responseData = await sendRequest(
+          `http://localhost:8080/patients/${patient.id}/plan`,
+          'GET', null,
+          {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + auth.token
+          }
+        );
+        setLoadedPlan(responseData);
+      } catch (err) {
+
+      }
+    };
+    fetchFoodPlan();
+  }
+    
+
+  }, [auth.token, patient.id, sendRequest]);
 
 
   return (
@@ -49,7 +77,7 @@ const FoodPlan = () => {
 
       {!isLoading && loadedAliments
         ?
-        <FoodPlanGroup patient={patient} aliments={loadedAliments} />
+        <FoodPlanGroup patient={patient} aliments={loadedAliments} plan={loadedPlan}/>
         :
         <div className='empty-warning'>
           <Loader color="teal" size="sm" variant="dots" />

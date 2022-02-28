@@ -8,7 +8,7 @@ import { Button, Menu } from '@mantine/core';
 import { FaBirthdayCake, FaPhoneAlt } from 'react-icons/fa';
 import { BsGenderAmbiguous, BsFillTrashFill } from 'react-icons/bs';
 import { HiMail } from 'react-icons/hi';
-import { AiOutlineEdit } from 'react-icons/ai';
+import { AiOutlineEdit, AiOutlineEye } from 'react-icons/ai';
 
 import PatientFullDetailsModal from './PatientFullDetailsModal'
 
@@ -25,6 +25,7 @@ import { useHttpClient } from '../../../shared/hooks/http-hook';
 import { Link, useNavigate } from 'react-router-dom';
 import { useNotifications } from '@mantine/notifications';
 import { AuthContext } from '../../../shared/context/auth-context';
+import { IoCreateOutline } from 'react-icons/io5';
 
 const PatientCard = props => {
 
@@ -61,7 +62,38 @@ const PatientCard = props => {
                 radius: 'lg',
                 icon: (<BsCheckCircleFill />),
                 color: "red"
-              })
+            })
+
+
+
+
+        } catch (err) {
+
+        }
+    }
+
+    const deleteFoodPlanHandler = async () => {
+
+        try {
+            await sendRequest(
+                `http://localhost:8080/patients/${props.patient.id}/plan`,
+                'DELETE',
+                null,
+                {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + auth.token
+                }
+            );
+
+            navigate(`/patients`);
+
+            notifications.showNotification({
+                title: 'Food Plan deleted!',
+                message: 'You can check all your patients in the Patients page.',
+                radius: 'lg',
+                icon: (<BsCheckCircleFill />),
+                color: "red"
+            })
 
 
 
@@ -80,6 +112,8 @@ const PatientCard = props => {
             </div>
         );
     }
+
+
 
     return (
 
@@ -155,18 +189,40 @@ const PatientCard = props => {
                                 control={
                                     <Button compact color='teal' variant="filled" size="xs" radius="md">Food plan</Button>
                                 }>
-                             
-
-                                <Menu.Item
-                                component={Link}
-                                to={`/patients/${props.patient.id}/foodplan`}
-                                state={{ patient: props.patient }}
-                                
-                                icon={<BsFillTrashFill />}>New plan</Menu.Item>
 
 
-                                <Menu.Item icon={<AiOutlineEdit />}>Edit plan</Menu.Item>
-                                <Menu.Item color="red" icon={<BsFillTrashFill />}>Delete plan</Menu.Item>
+                                {props.patient.hasFoodplan
+                                    ?
+                                    <Menu.Item icon={<AiOutlineEye />}>View plan</Menu.Item>
+
+                                    :
+                                    <Menu.Item
+                                        component={Link}
+                                        to={`/patients/${props.patient.id}/foodplan`}
+                                        state={{ patient: props.patient }}
+
+                                        icon={<IoCreateOutline />}>New plan</Menu.Item>
+                                }
+
+                                {props.patient.hasFoodplan &&
+                                    <Menu.Item
+                                        component={Link}
+                                        to={`/patients/${props.patient.id}/foodplan`}
+                                        state={{ patient: props.patient }}
+
+                                        icon={<AiOutlineEdit />}>Edit plan</Menu.Item>
+
+                                }
+
+                                {props.patient.hasFoodplan &&
+                                    <Menu.Item color="red" icon={<BsFillTrashFill />} onClick={deleteFoodPlanHandler}>Delete plan</Menu.Item>
+                                }
+
+
+
+
+
+
 
                             </Menu>
 

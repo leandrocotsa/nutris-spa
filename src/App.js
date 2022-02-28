@@ -24,17 +24,8 @@ import FoodPlan from './foodPlan/pages/FoodPlan';
 import Signup from './auth/pages/Signup';
 import { AuthContext } from './shared/context/auth-context';
 import { useAuth } from './shared/hooks/auth-hook';
+import AllFood from './food/pages/AllFood';
 
-
-
-//TODO: 
-//modal para editar measuremnts
-//notification system (ez)
-//placeholder de loading dos cartoes
-//forms de edit como preencho com os valores antigos
-//fetch da stuff do frontend
-//modal de editar consulta
-//planos e alimentos
 
 
 
@@ -59,6 +50,8 @@ const App = () => {
 
         <Route path="/appointments" exact element={<Appointments />} />
         <Route path="/appointments/:appointmentId/measurements" exact element={<AppointmentMeasurements />} />
+
+        <Route path="/food" exact element={<AllFood />} />
 
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

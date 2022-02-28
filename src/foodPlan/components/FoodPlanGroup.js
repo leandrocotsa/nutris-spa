@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef } from 'react';
+import React, { useState, useEffect, forwardRef, useContext } from 'react';
 
 
 import Card from '../../shared/components/UIElements/Card'
@@ -8,14 +8,17 @@ import { Accordion, Button, Divider, Group, NumberInput, Progress, Select, Text,
 
 
 import './FoodPlanGroup.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import { useNotifications } from '@mantine/notifications';
+import { AuthContext } from '../../shared/context/auth-context';
+import { BsCheckCircleFill } from 'react-icons/bs';
+import ReferenceMacroValues from './ReferenceMacroValues';
+import ProgressBarsMacro from './ProgressBarsMacro';
 
 const FoodPlanGroup = props => {
 
-    //state com array do food plan em que cada vez que muda é recalculada stuff
-    //o componente com as barras usa esse state como props
-    //sempre que acrescentar ou retirar um alimento o activeMacroNutrients muda de valores
-    //eu so consigo editar o ativo portanto há match entre o aberto e o que tem as barras
+
 
     const [foodDiaries, setFoodDiaries] = useState([]);
 
@@ -26,18 +29,30 @@ const FoodPlanGroup = props => {
     const [selectedMacro, setSelectedMacro] = useState([]);
 
 
+    const { sendRequest } = useHttpClient();
+    const navigate = useNavigate();
+    const notifications = useNotifications();
+    const auth = useContext(AuthContext);
 
 
-
-
-
-
-    //edit food plan logic
     useEffect(() => {
+        if(props.plan){
+            props.plan.foodDiaries.map((foodDiary) => {
+                foodDiary.identifier = props.plan.foodDiaries.indexOf(foodDiary) + 1;
+            })
+            setFoodDiaries(props.plan.foodDiaries);
+        }
+    }, [props.plan]);
+
+
+
+    useEffect(() => {
+
+        
 
         const currentMacros =
         {
-            id: selectedFoodDiary.id,
+            id: selectedFoodDiary.identifier,
             totalFat: 0,
             totalHydrates: 0,
             totalKcal: 0,
@@ -52,14 +67,14 @@ const FoodPlanGroup = props => {
                 if (meal.aliments.length !== 0) {
                     meal.aliments.forEach(aliment => {
                         console.log(aliment)
-                        if (aliment.alimentId && aliment.qty) {
-                            const fullAliment = props.aliments.find(a => a.id === aliment.alimentId);
+                        if (aliment.alimentId && aliment.qtyInGrams) {
+                            const fullAliment = props.aliments.find(a => parseInt(a.id) === parseInt(aliment.alimentId));
 
 
-                            currentMacros.totalFat += aliment.qty * fullAliment.lipid / 100;
-                            currentMacros.totalHydrates += aliment.qty * fullAliment.carbohydrate / 100;
-                            currentMacros.totalKcal += aliment.qty * fullAliment.calories / 100;
-                            currentMacros.totalProtein += aliment.qty * fullAliment.protein / 100;
+                            currentMacros.totalFat += aliment.qtyInGrams * fullAliment.lipid / 100;
+                            currentMacros.totalHydrates += aliment.qtyInGrams * fullAliment.carbohydrate / 100;
+                            currentMacros.totalKcal += aliment.qtyInGrams * fullAliment.calories / 100;
+                            currentMacros.totalProtein += aliment.qtyInGrams * fullAliment.protein / 100;
 
                             console.log(currentMacros);
 
@@ -76,21 +91,8 @@ const FoodPlanGroup = props => {
             setSelectedMacro(currentMacros);
 
 
-            //
+
         }
-
-
-        //set([...array, newStuff])
-
-        //recalculate on the selected foodDiary
-        //because whenever a food diary changes the changes are applied to the select diary always
-
-        //setPlanMacroNutrients
-
-        //console.log(selectedFoodDiary
-
-        //o selecred muda sempre qye o food diary muda, estao ligados
-        //mas nao pode poder o selected como dependencia senao tinha loop infinito
 
     }, [props.aliments, selectedFoodDiary, foodDiaries])
 
@@ -104,26 +106,60 @@ const FoodPlanGroup = props => {
                                         Hydrates: ${aliment.carbohydrate.toFixed(2)}`
             return {
                 label: aliment.name,
-                value: aliment.id,
+                value: aliment.id.toString(),
                 description: alimentDescription
             }
         }));
 
 
-
-        //recalculate on the selected foodDiary
-        //because whenever a food diary changes the changes are applied to the select diary always
-
-        //setPlanMacroNutrients
-
     }, [props.aliments])
+
+
+    const createPlanHandler = async (event) => {
+        event.preventDefault();
+
+
+
+        console.log(JSON.stringify({foodDiaries: foodDiaries}));
+        
+
+
+    
+        
+        try {
+            const responseData = await sendRequest(
+                `http://localhost:8080/patients/${props.patient.id}/plan`,
+                'POST',
+                JSON.stringify({foodDiaries: foodDiaries}),
+                {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + auth.token
+
+                }
+            );
+
+            navigate(`/patients/${props.patient.id}`);
+            notifications.showNotification({
+                title: 'Food plan created!',
+                message: 'You can check your patients\' food plans in the Patients page.',
+                radius: 'lg',
+                icon: (<BsCheckCircleFill />),
+                color: "teal"
+            })
+        } catch (err) {
+
+        }
+
+    
+
+    }
 
 
     const addFoodDiaryHandler = () => {
 
         setFoodDiaries([...foodDiaries,
         {
-            id: Math.random(),
+            identifier: foodDiaries.length + 1,
             meals: [
                 {
                     aliments: [],
@@ -150,14 +186,6 @@ const FoodPlanGroup = props => {
                     mealType: "Supper"
                 }
             ]
-
-            /** 
-                        id: Math.random(),
-                        totalFat: 0,
-                        totalHydrates: 0,
-                        totalKcal: 0,
-                        totalProtein: Math.floor(Math.random() * 31)
-                        */
         }])
 
     }
@@ -198,13 +226,7 @@ const FoodPlanGroup = props => {
 
 
                         {foodDiaries.map((foodDiary, foodDiaryIndex) => (
-                            <Accordion.Item label={<h3>Day plan {foodDiaryIndex} </h3>} onClick={() => setSelectedFoodDiary(foodDiary)}>
-
-
-
-
-
-
+                            <Accordion.Item label={<h3>Day plan {foodDiary.identifier} </h3>} onClick={() => setSelectedFoodDiary(foodDiary)}>
 
 
                                 {foodDiaries[foodDiaryIndex].meals.map((meal, mealIndex) => (
@@ -235,7 +257,10 @@ const FoodPlanGroup = props => {
                                                     itemComponent={SelectItem}
                                                     searchable
                                                     clearable
+                                                    value={aliment.alimentId}
                                                     onChange={(value) => {
+                                                        console.log("lol")
+                                                        console.log(aliment);
                                                         setFoodDiaries(prevFoodDiaries => {
 
                                                             const newFoodDiaries = [...prevFoodDiaries];
@@ -256,12 +281,13 @@ const FoodPlanGroup = props => {
                                                     variant="filled"
                                                     radius="md"
                                                     size="xs"
+                                                    value={aliment.qtyInGrams ? parseInt(aliment.qtyInGrams) : 0}
                                                     onBlur={(event) => {
                                                         setFoodDiaries(prevFoodDiaries => {
 
                                                             const newFoodDiaries = [...prevFoodDiaries];
 
-                                                            newFoodDiaries[foodDiaryIndex].meals[mealIndex].aliments[alimentIndex].qty = event.currentTarget.value;
+                                                            newFoodDiaries[foodDiaryIndex].meals[mealIndex].aliments[alimentIndex].qtyInGrams = event.currentTarget.value;
 
 
                                                             return newFoodDiaries;
@@ -315,14 +341,14 @@ const FoodPlanGroup = props => {
 
 
                     </Accordion>
-                    {foodDiaries.length !== 0 ? 
-                    <div className='fooddiary-submit-button'>
-                        <Button color='teal' variant="light" radius="md" style={{ marginTop: 20 }} compact onClick={() => { }}>Submit</Button>
-                    </div>
-                    :
-                    <div className='fooddiary-submit-button'>
-                        <Button color='teal' variant="light" radius="md" style={{ marginTop: 20 }} disabled compact onClick={() => { }}>Submit</Button>
-                    </div>
+                    {foodDiaries.length !== 0 ?
+                        <div className='fooddiary-submit-button'>
+                            <Button color='teal' variant="light" radius="md" style={{ marginTop: 20 }} compact type='submit' onClick={createPlanHandler}>Submit</Button>
+                        </div>
+                        :
+                        <div className='fooddiary-submit-button'>
+                            <Button color='teal' variant="light" radius="md" style={{ marginTop: 20 }} disabled compact>Submit</Button>
+                        </div>
                     }
 
                 </Card>
@@ -330,111 +356,11 @@ const FoodPlanGroup = props => {
             </div>
 
             <div className="food-plan-group__right-column">
-                <Card className="ref-values-card">
 
-                    <div className='ref-values-card-header'>
-                        <h2>Reference macro-nutrients values</h2>
-                    </div>
+                <ReferenceMacroValues patient={props.patient} />
 
+                <ProgressBarsMacro selectedMacro={selectedMacro} patient={props.patient} />
 
-
-                    <div className='ref-values-card__container'>
-                        <div className="ref-values-item">
-                            <h4><span className='ref-value'>Daily protein amount: </span>{props.patient.macroNutrients.proteins.toFixed(2)} g</h4>
-                        </div>
-                        <div className="ref-values-item">
-                            <h4><span className='ref-value'>Daily fat amount: </span>{props.patient.macroNutrients.fat.toFixed(2)} g</h4>
-                        </div>
-                        <div className="ref-values-item">
-                            <h4><span className='ref-value'>Daily carbohydrates amount: </span>{props.patient.macroNutrients.hydrates.toFixed(2)} g</h4>
-                        </div>
-                        <div className="ref-values-item">
-                            <h4><span className='ref-value'>Maximum daily kcal: </span>{props.patient.macroNutrients.vet.toFixed(2)} g</h4>
-                        </div>
-                        <div className="ref-values-item">
-                            <h4><span className='ref-value'>Mininum daily kcal: </span>{props.patient.macroNutrients.metBasalCurrentWeight.toFixed(2)} g</h4>
-                        </div>
-
-                    </div>
-
-
-
-
-
-
-
-
-
-                </Card>
-
-                <Card className='progress-card'>
-                    <div className='progress-card-header'>
-                        <h2>Macro-nutrients state</h2>
-                    </div>
-
-
-                    {selectedMacro.id ?
-                        <div>
-                            <h3>Day Plan 1</h3>
-                            <p>lol{selectedMacro.id}</p>
-                            <h4>Protein</h4>
-                            {selectedMacro.totalProtein < props.patient.macroNutrients.proteins
-                                ? <Progress value={parseInt((selectedMacro.totalProtein / props.patient.macroNutrients.proteins) * 100)} label={selectedMacro.totalProtein.toFixed(1) + "g"} size="xl" radius="xl" color="green" />
-                                :
-                                <React.Fragment>
-                                    <Progress value={100} label={selectedMacro.totalProtein.toFixed(1) + "g"} size="xl" radius="xl" color="red" />
-                                    <p>Exceeded</p>
-                                </React.Fragment>
-                            }
-
-                            <h4>Fat</h4>
-
-                            {selectedMacro.totalFat < props.patient.macroNutrients.fat
-                                ? <Progress value={parseInt((selectedMacro.totalFat / props.patient.macroNutrients.fat) * 100)} label={selectedMacro.totalFat.toFixed(1) + "g"} size="xl" radius="xl" color="lime" />
-                                :
-                                <React.Fragment>
-                                    <Progress value={100} label={selectedMacro.totalFat.toFixed(1) + "g"} size="xl" radius="xl" color="red" />
-                                    <p>Exceeded</p>
-                                </React.Fragment>
-                            }
-
-                            <h4>Carbohydrates</h4>
-
-
-                            {selectedMacro.totalHydrates < props.patient.macroNutrients.hydrates
-                                ? <Progress value={parseInt((selectedMacro.totalHydrates / props.patient.macroNutrients.hydrates) * 100)} label={selectedMacro.totalHydrates.toFixed(1) + "g"} size="xl" radius="xl" color="cyan" />
-                                :
-                                <React.Fragment>
-                                    <Progress value={100} label={selectedMacro.totalHydrates.toFixed(1) + "g"} size="xl" radius="xl" color="red" />
-                                    <p>Exceeded</p>
-                                </React.Fragment>
-                            }
-
-
-
-                            <h4>Calories</h4>
-
-                            {selectedMacro.totalKcal < props.patient.macroNutrients.vet
-                                ? <Progress value={parseInt((selectedMacro.totalKcal / props.patient.macroNutrients.vet) * 100)} label={selectedMacro.totalKcal.toFixed(1) + "kcal"} size="xl" radius="xl" color="teal" />
-                                :
-                                <React.Fragment>
-                                    <Progress value={100} label={selectedMacro.totalKcal.toFixed(1) + "g"} size="xl" radius="xl" color="red" />
-                                    <p>Exceeded</p>
-                                </React.Fragment>
-                            }
-
-
-
-                        </div>
-
-                        : <p>No selected Food Diary</p>
-
-
-
-                    }
-
-
-                </Card>
             </div>
 
 
