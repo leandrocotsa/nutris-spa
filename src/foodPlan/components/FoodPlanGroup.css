@@ -81,6 +81,22 @@
 
 }
 
+.fooddiary-action-buttons {
+    display: flex; 
+    justify-content: flex-end;
+}
+
+.fooddiary-submit-button {
+    display: flex; 
+    justify-content: center;
+}
+
+
+.food-plan-group__container h3 {
+    font-size: 0.9em;
+}
+
+
 
 
 

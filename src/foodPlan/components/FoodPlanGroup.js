@@ -66,7 +66,7 @@ const FoodPlanGroup = props => {
                         }
                     })
 
-                    
+
                 }
 
             }
@@ -74,7 +74,7 @@ const FoodPlanGroup = props => {
             );
             console.log(currentMacros);
             setSelectedMacro(currentMacros);
-            
+
 
             //
         }
@@ -149,11 +149,7 @@ const FoodPlanGroup = props => {
                     aliments: [],
                     mealType: "Supper"
                 }
-            ],
-            totalFat: 0,
-            totalHydrates: 0,
-            totalKcal: 0,
-            totalProtein: 0
+            ]
 
             /** 
                         id: Math.random(),
@@ -192,7 +188,7 @@ const FoodPlanGroup = props => {
             <div className="food-plan-group__left-column">
                 <Card className='food-plan-card'>
                     <div className='food-plan-card-header'>
-                        <Button color='teal' variant="light" radius="md" compact onClick={addFoodDiaryHandler}>
+                        <Button color='teal' variant="outline" radius="md" compact onClick={addFoodDiaryHandler}>
                             + New day plan
                         </Button>
                     </div>
@@ -203,15 +199,7 @@ const FoodPlanGroup = props => {
 
                         {foodDiaries.map((foodDiary, foodDiaryIndex) => (
                             <Accordion.Item label={<h3>Day plan {foodDiaryIndex} </h3>} onClick={() => setSelectedFoodDiary(foodDiary)}>
-                                <Button color='red' variant="light" radius="md" compact onClick={() => {
-                                    setFoodDiaries((prevFoodDiaries) => {
-                                        const newFoodDiaries = [...prevFoodDiaries];
-                                        newFoodDiaries.splice(foodDiaryIndex, 1);
 
-                                        return newFoodDiaries;
-                                    })
-                                    setSelectedFoodDiary([]); //never executews because it is also clicked on the accordion
-                                }}>Delete</Button>
 
 
 
@@ -222,7 +210,7 @@ const FoodPlanGroup = props => {
                                 {foodDiaries[foodDiaryIndex].meals.map((meal, mealIndex) => (
                                     <React.Fragment>
                                         <Divider my="xs" label={meal.mealType} />
-                                        <Button color='teal' variant="light" radius="md" compact onClick={() => {
+                                        <Button color='teal' variant="outline" radius="md" style={{ marginTop: 10, marginBottom: 10 }} compact onClick={() => {
                                             setFoodDiaries(prevFoodDiaries => {
 
                                                 const newFoodDiaries = [...prevFoodDiaries];
@@ -235,7 +223,7 @@ const FoodPlanGroup = props => {
                                             + Aliment
                                         </Button>
                                         {meal.aliments.map((aliment, alimentIndex) => (
-                                            <div className="food-plan-aliment-field">
+                                            <div className="food-plan-aliment-field className='fooddiary-action-buttons'">
                                                 <Select
                                                     label="Aliment"
                                                     placeholder="Select an aliment"
@@ -282,6 +270,8 @@ const FoodPlanGroup = props => {
                                                     }}
                                                 />
 
+
+
                                                 <Button color='red' variant="light" radius="md" style={{ marginTop: 30 }} compact onClick={() => {
                                                     setFoodDiaries(prevFoodDiaries => {
 
@@ -301,6 +291,18 @@ const FoodPlanGroup = props => {
                                         ))}
                                     </React.Fragment>
                                 ))}
+                                <div className='fooddiary-action-buttons'>
+                                    <Button color='red' variant="light" radius="md" style={{ marginTop: 20 }} compact onClick={() => {
+                                        setFoodDiaries((prevFoodDiaries) => {
+                                            const newFoodDiaries = [...prevFoodDiaries];
+                                            newFoodDiaries.splice(foodDiaryIndex, 1);
+
+                                            return newFoodDiaries;
+                                        })
+                                        setSelectedFoodDiary([]); //never executews because it is also clicked on the accordion
+                                    }}>Delete</Button>
+
+                                </div>
 
 
 
@@ -310,7 +312,18 @@ const FoodPlanGroup = props => {
 
 
 
+
+
                     </Accordion>
+                    {foodDiaries.length !== 0 ? 
+                    <div className='fooddiary-submit-button'>
+                        <Button color='teal' variant="light" radius="md" style={{ marginTop: 20 }} compact onClick={() => { }}>Submit</Button>
+                    </div>
+                    :
+                    <div className='fooddiary-submit-button'>
+                        <Button color='teal' variant="light" radius="md" style={{ marginTop: 20 }} disabled compact onClick={() => { }}>Submit</Button>
+                    </div>
+                    }
 
                 </Card>
 
@@ -387,7 +400,7 @@ const FoodPlanGroup = props => {
 
                             <h4>Carbohydrates</h4>
 
-                            
+
                             {selectedMacro.totalHydrates < props.patient.macroNutrients.hydrates
                                 ? <Progress value={parseInt((selectedMacro.totalHydrates / props.patient.macroNutrients.hydrates) * 100)} label={selectedMacro.totalHydrates.toFixed(1) + "g"} size="xl" radius="xl" color="cyan" />
                                 :
@@ -411,7 +424,7 @@ const FoodPlanGroup = props => {
                             }
 
 
-                            
+
                         </div>
 
                         : <p>No selected Food Diary</p>
