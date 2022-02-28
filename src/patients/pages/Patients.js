@@ -16,7 +16,7 @@ const Patients = () => {
 
 
   useEffect(() => {
-    const fetchAppointments = async () => { //not a good practice to turn useEffect into async so this is the way to go
+    const fetchPatients = async () => { //not a good practice to turn useEffect into async so this is the way to go
 
       try {
         const responseData = await sendRequest(
@@ -32,7 +32,7 @@ const Patients = () => {
 
       }
     };
-    fetchAppointments();
+    fetchPatients();
 
 
   }, [auth.token, sendRequest]);

@@ -70,3 +70,17 @@
 .food-plan-card {
     margin-bottom: 30px;
 }
+
+
+.food-plan-aliment-field {
+
+    margin-top: 20px;
+    display: grid;
+    gap: 1em;
+    grid-template-columns: 5fr 3fr 0.5fr;
+
+}
+
+
+
+
